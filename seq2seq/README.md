@@ -9,6 +9,7 @@
       2. Vec2Seq
    2. GRU
 3. Seq2Seq
+4. 부록
 
 ## 1. Seq2Seq 개요
 
@@ -111,3 +112,11 @@ Preliminary에 있는 개념을 파악하면 Seq2Seq를 어렵지 않게 이해�
 예측 단계를 먼저 살펴보면, Encoder에서 `순서가 있는 일련의 input`을 `S`라는 하나의 벡터로 축약한다. 이 벡터를 Decoder에서 시작을 알리는 벡터를 `input`으로 넣고 RNN의 초기 상태를 `S`로 하여, `순서가 있는 일련의 output`을 출력한다.
 
 훈련 단계에서는 Encoder는 변하지 않고, Decoder에서 예측 단계와는 다르게 teacher forcing을 사용한다.
+
+훈련 단계에서 각각의 output의 softmax와 label를 이용하여 cross entropy를 구해 loss를 정의하고 backpropagation을 통해 가중치를 업데이트한다.
+
+참고: 번역의 경우 BLEU score을 통해 모델의 성능을 평가한다.
+
+## 4. BLEU
+
+BLEU 내용 업데이트하기
