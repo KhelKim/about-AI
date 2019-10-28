@@ -2,9 +2,9 @@
 
 ## Index
 
-1. Introduction
+1. [Introduction]( https://github.com/KhelKim/basic-nlp/tree/master/edwith/01 )
    1. introduction
-2. Basic Machine Learning: Supervised Learning
+2. [Basic Machine Learning: Supervised Learning]( https://github.com/KhelKim/basic-nlp/tree/master/edwith/02 )
    1. Overview
    2. Hypothesis Set
    3. Loss Function - Preview
