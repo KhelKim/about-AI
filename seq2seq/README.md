@@ -10,6 +10,7 @@
    2. GRU
 3. Seq2Seq
 4. 부록
+   1. BLUE
 
 ## 1. Seq2Seq 개요
 
@@ -117,6 +118,8 @@ Preliminary에 있는 개념을 파악하면 Seq2Seq를 어렵지 않게 이해�
 
 참고: 번역의 경우 BLEU score을 통해 모델의 성능을 평가한다.
 
-## 4. BLEU
+## 4. 부록
+
+### 4.1. BLEU
 
 BLEU 내용 업데이트하기

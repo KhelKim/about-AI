@@ -1,4 +1,4 @@
 # BASIC NLP
 
-2019.10.23 Sequence-to-Sequence
+1. [Seq2Seq]( https://github.com/KhelKim/basic-nlp/tree/master/seq2seq )
 
