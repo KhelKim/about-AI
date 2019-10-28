@@ -10,7 +10,7 @@
    3. Loss Function - Preview
    4. Probability in 5 minutes
    5. Loss Function
-   6. Optimization methods
+   6. Optimization Methods
    7. Backpropagation
    8. Gradient-Based Optimization
    9. Summary
