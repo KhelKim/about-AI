@@ -9,4 +9,4 @@
 
 ## Attention
 
-![attention](.\images\attention.png)
+![attention](./images/attention.png)
