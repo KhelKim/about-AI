@@ -9,4 +9,4 @@
 
 ## Attention
 
-![attention](C:\Users\student\Documents\github\NLP\basic_nlp\attention\images\attention.png)
+![attention](.\images\attention.png)
