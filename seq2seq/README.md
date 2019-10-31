@@ -114,12 +114,12 @@ Preliminary에 있는 개념을 파악하면 Seq2Seq를 어렵지 않게 이해�
 
 훈련 단계에서는 Encoder는 변하지 않고, Decoder에서 예측 단계와는 다르게 teacher forcing을 사용한다.
 
-훈련 단계에서 각각의 output의 softmax와 label를 이용하여 cross entropy를 구해 loss를 정의하고 backpropagation을 통해 가중치를 업데이트한다.
-
-참고: 번역의 경우 BLEU score을 통해 모델의 성능을 평가한다.
+훈련 단계에서 각각의 output의 softmax와 label를 이용하여 cross entropy를 구해 loss를 정의하고 backpropagation을 통해 가중치를 업데이트한다. 
 
 ## 4. 부록
 
 ### 4.1. BLEU
+
+번역의 경우 BLEU score을 통해 모델의 성능을 평가한다.
 
 BLEU 내용 업데이트하기
