@@ -11,7 +11,6 @@
 7. Backpropagation
 8. Gradient-Based Optimization
 9. Summary
-10. Questions
 
 ## Overview
 
@@ -210,3 +209,36 @@ pytorch 혹은 tensorflow에서 제공하는 automatic differentiation 덕분에
 
 ## Gradient-Based Optimization
 
+- train 데이터 전부를 보고 Backpropagation을 통해 loss funtion을 낮추는 gradient를 계산하기엔 연산상의 문제가 있음
+- 따라서 stochastic gradient descent를 사용함
+  - stochastic gradient descent: Approximate the full loss function (the sum of per-examples losses) using only a small random subset of training examples:
+    - $\nabla L \approx \frac{1}{N'}\sum^{N'}_{n=1}\nabla l(M(x_{n}, y_n))$
+  - Unbiased estimate of the full gradient.
+  - Extremely efficient de facto standard practice.
+-  Stochastic gradient descent in practice
+  1. Grab a random subset of M training examples
+     - $D' = \{(x_1, y_1), \cdots, (x_{N'}, y_{N'}\}$
+  2. Compute the minibatch gradient
+  3. Update the parameters
+     - $\theta \larr \theta + \eta \nabla (\theta ; D')$
+  4. Repeat until the validation loss stops improving.
+     - validation의 loss가 더 떨어지지 않으면 early stop을 해야한다.
+     - An efficient way to prevent overfitting
+       - Overfitting: the training loss is low, but the validation loss is not
+       - The most serious problem in statistical machine learning
+       - one of the solutions: **Early-stop** based on the validation loss
+- Adaptive learning rate: Adam, Adadelta, etc, ...
+  - 최적의 learning rate를 찾기 위해서 여러 learning rate를 시험해보는 것도 중요하지만 초반 prototype을 만들 때는 adam, adadelta 등을 통해 다른 가능성을 지우는 것도 중요함.
+
+## Summary
+
+Supervised Learning with Neural Networks
+
+1. How do we decide/design a **hypothesis set**?
+   - Design a network architecture as a directed acyclic graph
+2. How do we decide a **loss function**?
+   - Frame the problem as a conditional distribution modelling
+   - The per-example loss function is a negative log-probability of a correct answer
+3. How do we **optimize** the loss function?
+   - Automatic backpropagation: no manual gradient derivation
+   - Stochastic gradient descent with early stopping [and adaptive learning rate]
