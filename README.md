@@ -41,7 +41,7 @@
       4. Real-Time Translation Learning to Decode
       5. Questions
    7. Finishing the lecture
-      1. Finishing th lecture
+      1. Finishing the lecture
 2. [Seq2Seq]( https://github.com/KhelKim/basic-nlp/tree/master/seq2seq )
    1. Seq2Seq 개요
    2. Preliminary
