@@ -42,5 +42,5 @@
    4. Real-Time Translation Learning to Decode
    5. Questions
 7. Finishing the lecture
-   1. Finishing th lecture
+   1. Finishing the lecture
 
