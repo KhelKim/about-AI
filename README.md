@@ -59,3 +59,4 @@
       1. BiRNN
       2. LSTM
 
+4. [Transformer]( https://github.com/KhelKim/basic-nlp/tree/master/transform )
