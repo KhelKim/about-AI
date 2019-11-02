@@ -60,3 +60,4 @@
       2. LSTM
 
 4. [Transformer]( https://github.com/KhelKim/basic-nlp/tree/master/transform )
+5. [Bert]( https://github.com/KhelKim/basic-nlp/tree/master/bert )
