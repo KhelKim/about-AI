@@ -17,17 +17,12 @@
    1. Seq2Seq 개요
    2. Preliminary
       3. RNN 구조
-         1. Seq2Vec
-         2. Vec2Seq
       4. GRU
    5. Seq2Seq
    6. 부록
-      1. BLUE
 3. [Attention](https://github.com/KhelKim/basic-nlp/tree/master/attention)
    1. Attention 개요
    2. Attention
    3. BiLSTM
-      1. BiRNN
-      2. LSTM
 4. [Transformer]( https://github.com/KhelKim/basic-nlp/tree/master/transform )
 5. [Bert]( https://github.com/KhelKim/basic-nlp/tree/master/bert )
