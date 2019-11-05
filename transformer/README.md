@@ -1,5 +1,65 @@
 # Transformer
 
+## Index
+
+1. Introduction of Transformer
+2. Preliminary
+   1. Self-Attention
+   2. Residual Connction
+   3. Layer Normalization
+3. Transformer
+   1. Positional Embedding
+   2. Scaled Dot-Product Attention
+   3. Multi Head Self-Attention
+   4. Transformer
+
+## Introduction of the Transformer
+
+Transformer 이전의 sequece transduction model들은 encoder와 decoder를 사용한 RNN 기반의 구조로 이루어져 있다. 이 RNN을 기반으로 한 구조의 RNN layer는 순차적으로 정보를 읽는다. 하지만 이 순차적이라는 것은 input의 길이가 길면 문제가 된다. 
+
+```
+The word 'scapegoat' comes from an ancient Jewish tradition about a goat. When a Jew wanted to be forgotten for his sins, he had to bring to two goats to a high priest. One goat was sacrificed to God. The priest then laid his hand in the other goat and recited the person's sins. This goat was called a scapegoat. It was sent into the wilderness. The Jew believed it carried the sins away with it.
+```
+
+위와 같은 문장이 있을 때, 마지막 문장의 it이 의미하는 바를 RNN 구조가 제대로 해석할 수 있을지 생각하면 어려울 것이라 생각된다. 그 이유는 it이 의미하는 goat는 세 문장 전에 나왔고, 세 문장안에는 it의 의미로 헷갈릴 만한 명사들이 많이 등장한다. RNN이 이를 순차적으로 본다면 아마 goat는 LSTM과 GRU Cell에서 서서히 잊혀질 것이다.
+
+이를 해결하기 위해  Transformer은 기존 sequence transduction model에서 RNN 구조를 버린다. 그리고 encoder에서 긴 input의 각각의 단어가 input의 어떤 단어와 연관성이 높은지 scoring을 하고(Attention Scoring) 이를 decoder에 추가적으로 input에 추가한다. 이 기존과 다른 구조는 RNN 구조를 버림으로서 속도를 얻고, encoder와 decoder의 Attention을 통해  정확도를 얻었다.
+
+## Preliminary
+
+### Self-Attention
+
+![self-attention](./images/self-attention.png)
+
+Self-Attention은 문장에서 각 단어끼리 얼마나 관계가 있는지를 계산해서 반영하는 방법이다. $x_1$의 self-Attention의 출력값인 $c_1$을 어떻게 얻을 수 있는지 알아보자.
+
+1.  $x_1, x_2, x_3, x_4$는 embedding matrix를 통해 $v_1, v_2, v_3, v_4$으로 변환된다.
+2. $e_{1j} = Attention(v_1, v_j)$
+   - $e_{ij}$: $v_i$와 $v_j$의 상관 관계의 크기 
+3. $(\alpha_{11}, \alpha_{12}, \alpha_{13}, \alpha_{14}) = softmax((e_{11}, e_{12}, e_{13}, e_{14}))$
+4. $c_1 = \sum^4_{j=1}\alpha_{1j}v_j$
+   - $\alpha_{ij}의 크기가 클 수록 c_i는 v_j와 비슷해진다.$
+
+이렇게 구한 $c_1$을 $x_1$에 대한 context vector라고 한다. context vector $c_1$은 $x_1$의 문장에 대한 관계를 수치화한 값이다. 이 과정을 $x_2, x_3, x_4$에 대해 반복하면 $(c_1, c_2, c_3, c_4)$를 얻을 수 있다.
+
+### Residual Connection
+
+![residual connection](https://t1.daumcdn.net/cfile/tistory/995D29385B13DA5A24)
+
+Residual connection이 보는 깊은 딥러닝의 문제는 다음과 같다. 만약 신경망의 깊이가 3이 가장 적절하다고 가정하자. 이 신경망에 필요 이상으로 layer들이 더 추가된다면 이 layer들은 identity mapping이면 충분하다. 하지만 모델들은 identity mapping을 잘 만들지 못한다. 따라서 특정 깊이 이상으로 layer을 추가적으로 늘린다면 오히려 loss가 늘어나게 된다.
+
+Residual connection은 이 문제를 해결하는 방법은 layer의 input이 현재 상태에 비해 얼마나 변해야 되는지를 layer가 훈련하는 것이다. 즉, 우리가 원하는 결과가 $H(x)$라면 layer가 추론하는 값은 $H(x) - x$가 된다. 이 추론값을 $F(x)$라고 한다면, 이 layer에 추가로 $+x$를 해주는 layer을 추가한다면 $F(x)$는 $x$가 변화하는 정도를 학습하면 된다.
+
+만약 H(x)가 identity mapping이 이상적 mapping이라면 F(x)가 추론해야 하는 것은
+
+### Layer Normalization
+
+
+
+
+
+
+
 1. residual connection
    1. residual connection이 보는 깊은 딥러닝의 문제
       1. 신경망이 깊어질 때, 필요 이상으로 layer들이 더 추가된다면 이 layer들은 identity mapping이면 충분하다.
