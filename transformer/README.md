@@ -85,10 +85,12 @@ Batch normalization의 단점은 1. mini-batch size에 의존하고 2. dynamic R
 - $\sigma^2_l = (\frac{1}{4}\sum^4_{j=1}(h_{1j}-\mu_l[1])^2, \frac{1}{4}\sum^4_{j=1}(h_{2j}-\mu_l[2])^2, \frac{1}{4}\sum^4_{j=3}(h_{3j}-\mu_l[3])^2$
 - $\hat{h_ij} = \frac{h_ij - \mu_l}{\sqrt{\sigma^2_l + \epsilon}}$
 
+## Transformer
 
+### Positional Embedding
 
-1. positional embedding(in paper)
-2. Scaled Dot-Product Attention(in paper)
-3. Multi head self attention(in paper)
-   1. self attention?
-   2. Multi head attention?
+### Scaled Dot-Product Attention
+
+### Multi Head Self-Attention
+
+### Transformer
