@@ -6,7 +6,7 @@
 2. Preliminary
    1. Self-Attention
    2. Residual Connction
-   3. Layer Normalization
+   3. Batch Normalization and Layer Normalization
 3. Transformer
    1. Positional Embedding
    2. Scaled Dot-Product Attention
@@ -46,46 +46,49 @@ Self-Attention은 문장에서 각 단어끼리 얼마나 관계가 있는지를
 
 ![residual connection](https://t1.daumcdn.net/cfile/tistory/995D29385B13DA5A24)
 
-Residual connection이 보는 깊은 딥러닝의 문제는 다음과 같다. 만약 신경망의 깊이가 3이 가장 적절하다고 가정하자. 이 신경망에 필요 이상으로 layer들이 더 추가된다면 이 layer들은 identity mapping이면 충분하다. 하지만 모델들은 identity mapping을 잘 만들지 못한다. 따라서 특정 깊이 이상으로 layer을 추가적으로 늘린다면 오히려 loss가 늘어나게 된다.
+Residual connection이 보는 깊은 딥러닝의 문제는 다음과 같다. 만약 신경망의 깊이가 3이 가장 적절하다고 가정하자. 이 신경망에 필요 이상으로 layer들이 더 추가된다면 이 layer들은 identity mapping이면 충분하다. 하지만 모델들은 identity mapping을 잘 만들지 못한다(불확실한 정보). 따라서 특정 깊이 이상으로 layer을 추가적으로 늘린다면 오히려 loss가 늘어나게 된다.
 
 Residual connection은 이 문제를 해결하는 방법은 layer의 input이 현재 상태에 비해 얼마나 변해야 되는지를 layer가 훈련하는 것이다. 즉, 우리가 원하는 결과가 $H(x)$라면 layer가 추론하는 값은 $H(x) - x$가 된다. 이 추론값을 $F(x)$라고 한다면, 이 layer에 추가로 $+x$를 해주는 layer을 추가한다면 $F(x)$는 $x$가 변화하는 정도를 학습하면 된다.
 
-만약 H(x)가 identity mapping이 이상적 mapping이라면 F(x)가 추론해야 하는 것은
+만약 구해야하는 $H(x)$의 이상적 mapping이 identity mapping이라면 $F(x)$가 추론해야 하는 것은 zero mapping이다. zero mapping은 solver가 학습하기 더 쉽기에(불확실한 정보) 필요없는 layer라면 zero mapping으로 잘 수렴될 것이다. 실험적으로 learned residual functions는 small response를 가지고 있다.
 
-### Layer Normalization
+[Deep residual learning for image recognition]( https://arxiv.org/pdf/1512.03385.pdf )이 논문에는 나오지 않지만 추가적으로 gradient 소실 문제와 폭발 문제를 해결해주기도 한다고 한다(출처, paper, Residual Recurrent Neural Networks for Learning Sequential Representations).
+
+### Batch Normalization and Layer Normalization
+
+내용 출처: [layer normalization](https://arxiv.org/pdf/1607.06450.pdf)
+
+#### Batch Normalization
+
+**Batch Normalization**은 훈련하는 동안 이전 층의 파라미터가 변함에 따라 각 층에 들어오는 입력의 분포가 변화되는 문제를 해결하고자 나온 개념이다. 이 기법은 각 층에서 활성화 함수를 통과하기 전에 모델에 연산을 하나 추가하는데, 단순하게 입력 데이터의 평균을 0으로 만들고 정규화한 다음, 각 층에서 두 개의 새로운 파라미터로 결과값의 스케일을 조정하고 이동시킨다(하나는 스케일 조정을 위해, 다른 하나는 이동을 위해 필요). 이로 인해 모델이 층마다 입력 데이터의 최적 스케일과 평균을 학습한다.
+
+#### Layer Normalization
+
+Batch normalization의 단점은 1. mini-batch size에 의존하고 2. dynamic RNN에는 어떻게 적용되야 할지 모호하다는 것이다. 이를 해결하기 위해 나온 개념이 **Layer Normalization**이다. 이와 달리 Layer normalization은 훈련 때와 추론 때 모두 같은 계산을 한다. 또 각 time step의 RNN Cell에 적용하는데 강점이 있다.
+
+#### Batch Normalization vs Layer Normalization
+
+- $H_l := \begin{bmatrix} h_{11} & h_{12} & h_{13} & h_{14} \\ h_{21} & h_{22} & h_{23} & h_{24} \\ h_{31} & h_{32} & h_{33} & h_{34} \end{bmatrix}$
+- $H_l$: $l$번째 hidden layer의 출력 matrix
+- $row(H_l)$: n of input
+- $column(H_l)$: n of the hidden units of $H_l$
+
+##### Batch Normalization
+
+- $\mu_l = (\frac{1}{3}\sum^3_{i=1}h_{i1}, \frac{1}{3}\sum^3_{i=1}h_{i2}, \frac{1}{3}\sum^3_{i=1}h_{i3}, \frac{1}{3}\sum^3_{i=1}h_{i4})$
+- $\sigma^2_l = (\frac{1}{3}\sum^3_{i=1}(h_{i1}-\mu_l[1])^2, \frac{1}{3}\sum^3_{i=1}(h_{i2}-\mu_l[2])^2, \frac{1}{3}\sum^3_{i=3}(h_{i3}-\mu_l[3])^2, \frac{1}{3}\sum^3_{i=1}(h_{i4}-\mu_l[4])^2)$
+- $\hat{h_ij} = \frac{h_ij - \mu_l}{\sqrt{\sigma^2_l + \epsilon}}$
+
+##### Layer Normalization
+
+- $\mu_l = (\frac{1}{4}\sum^4_{j=1}h_{1j}, \frac{1}{4}\sum^4_{j=1}h_{2j}, \frac{1}{4}\sum^4_{j=1}h_{3j})$
+- $\sigma^2_l = (\frac{1}{4}\sum^4_{j=1}(h_{1j}-\mu_l[1])^2, \frac{1}{4}\sum^4_{j=1}(h_{2j}-\mu_l[2])^2, \frac{1}{4}\sum^4_{j=3}(h_{3j}-\mu_l[3])^2$
+- $\hat{h_ij} = \frac{h_ij - \mu_l}{\sqrt{\sigma^2_l + \epsilon}}$
 
 
 
-
-
-
-
-1. residual connection
-   1. residual connection이 보는 깊은 딥러닝의 문제
-      1. 신경망이 깊어질 때, 필요 이상으로 layer들이 더 추가된다면 이 layer들은 identity mapping이면 충분하다.
-      2. 하지만 deep learning은 identity mapping을 만들지 않는다.
-   2. 해결방안
-      1. 얼마나 변하는지를 관찰하자. $F(x) = H(x) - x$
-      2. 만약 identity mapping이 이상적인 mapping이라면 구해야하는 것은 zero mapping이다.
-      3. 그러면 solver은 학습하기 더 쉬워질 것이다(zero mapping이 학습하기 쉬운가(?)).
-      4. 실험적으로 learned residual functions는 small response를 가지고 있다(response가 matrix의 크기인듯?). it supports our basic motivation that the residual funcitons might be generally closer to zero than non-residual functions.(이 말도 zero mapping이 학습하기 쉽다는 듯이 읽힘)
-   3. 논문에 나오진 않지만 추가적인 benefit
-      1. sovling vanishing and exploding gradient problem
-2. layer normalization
-   1. batch normalization vs layer normalization
-3. positional embedding(in paper)
-4. Scaled Dot-Product Attention(in paper)
-5. Multi head self attention(in paper)
+1. positional embedding(in paper)
+2. Scaled Dot-Product Attention(in paper)
+3. Multi head self attention(in paper)
    1. self attention?
    2. Multi head attention?
-
-
-
-
-
-- residual connection
-  - [Deep residual learning for image recognition]( https://arxiv.org/pdf/1512.03385.pdf )
-  - [라온피플
-  - paper: Residual Recurrent Neural Networks for Learning Sequential Representations
-- layer normalization
-  - [layer normalization](https://arxiv.org/pdf/1607.06450.pdf)
