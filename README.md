@@ -16,14 +16,20 @@
 2. [Seq2Seq]( https://github.com/KhelKim/basic-nlp/tree/master/seq2seq )
    1. Seq2Seq 개요
    2. Preliminary
-      3. RNN 구조
-      4. GRU
-   5. Seq2Seq
-   6. 부록
+      1. RNN 기초 구조
+      2. GRU
+   3. Seq2Seq
+   4. 부록
 3. [Seq2Seq with Attention]( https://github.com/KhelKim/basic-nlp/tree/master/seq2seq_with_attention )
    1. Attention 개요
    2. Attention
    3. BiLSTM
 4. [BiLSTM with Attentioin]( https://github.com/KhelKim/basic-nlp/tree/master/BiLSTM_with_attention )
 5. [Transformer]( https://github.com/KhelKim/basic-nlp/tree/master/transformer  )
+   1. Introduction of Transformer
+   2. Preliminary
+      1. Self-Attention
+      2. Residual Connection
+      3. Batch Normalization and Layer Normalization
+   3. Transformer
 6. [Bert]( https://github.com/KhelKim/basic-nlp/tree/master/bert )
