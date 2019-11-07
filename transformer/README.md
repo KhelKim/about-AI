@@ -115,22 +115,28 @@ Attention에 들어오는 query와 key의 dimension을 $d_k$, value의 dimension
 
 $d_k$가 작은 경우에는 두 attention이 비슷하지만, $d_k$가 크다면, additive attention이 dot product attention보다 성능이 좋다. $d_k$가 크다면, dot product의 크기는 매우 커지고, 그렇다면 softmax 함수의 출력값이 매우 작아지게 된다. 이를 상쇄하기 위해서 논문에서는 $\sqrt{d_k}$로 dot product를 나눠주었다.
 
-따라서 $x_1$의 context vector인 $c_1$는 다음과 같다.
+식으로 보면 다음과 같다.
 
-- $v := embedding((x_1, x_2, x_3, x_4))$
-- $\alpha := softmax((v[1] \cdot v[1], v[1] \cdot v[2], v[1] \cdot v[3], v[1] \cdot v[4]) / \sqrt{d_k})$
-- $c_1 = \sum^4_{j=1} \alpha_{1j} v_j \text{ where } \alpha_{1j}:= \alpha[j] \text{ and } v_j := v[j]$ 
-
-이 과정을 matrix로 표현하면 다음과 같다.
-
-- $Q := [v_1, v_2, v_3, v_4], K := Q, V:= Q$
 - $Attention(Q, K, V) = softmax(\frac{QK^T}{\sqrt{d_k}})V$
 
 #### Multi-Head Attention
 
+$d_{model}$ 차원을 가진 keys, values, queries보다 keys, values, queries를 $d_k, d_k, d_v$차원으로 projection을 하는 것이 더 좋다. 이 각각의 projection된 keys, values, queries에 대해 attention을 적용하고 $d_v$-dimensional vector를 출력한다. 추가로 이 과정을 h번 반복하여 각각의 output을 concate하여 다시 projection한다.
 
+이 Multi-head attention은 각각 다른 위치와 다른 표현의 정보를 함축할 수 있다. Multi-head attention의 수식은 다음과 같다.
+
+- $MultiHead(Q, K, V) = Concat(head_1, \cdots, head_h)W^O \text{ where } head_i = Attention(QW^Q_i, KW^K_i, VW^V_i)$
+- Where the projections are parameter matrices $W^Q_i \in \mathbb{R}^{d_{model} \times d_k}, W^K_i \in \mathbb{R}^{d_{model} \times d_k}, W^V_i \in \mathbb{R}^{d_{model} \times d_v}$ and $W^O \in \mathbb{R}^{hd_v \times d_{model}}$
+
+논문에서는 $h = 8, d_k = d_v = d_{model}/h = 64$로 설정했다. 각각의 head의 dimension의 개수를 낮춰서 종합적인 계산량은 single-head attention과 비슷하다.
 
 #### Applications of Attention in our Model
+
+Transformer는 세가지 방향으로 multi-head attention을 사용한다.
+
+- "encoder-decoder attention" layer에서 query는 previous decoder layer에서 오며 keys and values는 input sequence에서 참조한다. 이 덕분에 decoder는 input sequence의 모든 위치를 참조할 수 있다.
+- encoder의 self-attention layer의 key, value, query는 모두 전 layer의 출력에서 참조한다. 각각의 위치의 데이터는 모든 위치를 참조한다.
+- decoder의 self-attention layer는 현재 위치와 현재 위치보다 전에 있는 것만 참조한다. 
 
 ### Position-wise Feed-Forward Networks
 
