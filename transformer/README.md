@@ -91,13 +91,17 @@ Batch normalization의 단점은 1. mini-batch size에 의존하고 2. dynamic R
 
 ![transformer](./images/transformer.png)
 
+![transformer2](https://machinereads.files.wordpress.com/2018/09/real-apply.png?w=720)
+
+그림출처(https://machinereads.com/2018/09/26/attention-is-all-you-need/)
+
 많은 sequence transduction model은 encoder-decoder structure를 가지고 있다. encoder는 input sequence $(x_1, x_2, \cdots, x_n)$을 연속적인 값을 가진 $z = (z_1, \cdots, z_n)$로 바꾼다. 주어진 $z$에 대해, decoder는 output sequence $(y_1, y_2, \cdots, y_m)$을 출력한다.
 
 Transformer는 이런 self-attention과 point-wise, fully connected layer를 이용하여 encoder, decoder 구조를 따른다.
 
 ### Encoder and Decoder Stacks
 
-**Encoder**: encoder는 N개의(논문에서는 N=6) 똑같은 layer로 구성되어 있다. 각 layer는 두가지 sub-layer를 가지고 있다. 첫번째는 multi-head self-attention이고 두번째는 position-wise fully connected feed-forward network이다. 또 residual connection과 layer normalization을 두 sub-layer에 각각 적용했다. 결과적으로 한 layer을 지나 출력된 결과는 $LayerNorm(x + MultiHeadSelfAttention(x))$이다. residual connection을 적용의 편의를 위하여 모든 sub-layers 혹은 embedding layer도 dimension을  $d_{model}$로 일정하게 한다(논문에서는 $d_{model}=512$).
+**Encoder**: encoder는 N개의(논문에서는 N=6) 똑같은 layer로 구성되어 있다. 각 layer는 두가지 sub-layer를 가지고 있다. 첫번째는 multi-head self-attention이고 두번째는 position-wise fully connected feed-forward network이다. 또 residual connection과 layer normalization을 두 sub-layer에 각각 적용했다. 결과적으로 한 layer을 지나 출력된 결과는 $LayerNorm(x + Sublayer(x))$이다. residual connection을 적용의 편의를 위하여 모든 sub-layers 혹은 embedding layer도 dimension을  $d_{model}$로 일정하게 한다(논문에서는 $d_{model}=512$).
 
 **Decoder**: decoder도 마찬가지고 N개의(논문에서는 N=6) 똑같은 layer로 구성되어 있다. encoder의 두개의 sub-layer에 추가로 세번째 sub-layer를 사이에 추가한다. 이 sub-layer는 encoder stack의 출력값 위에 multi-head attention을 적용한다. encoder와 마찬가지로 residual connection과 layer normalization을 적용한다. self-attention sub-layer는 $y_i$를 예측할 때, 뒤쪽 단어를 보고 예측하지 않을 수 있도록 막는다. 이런 masking은 예측할 때, $i$보다 전에 예측한 출력을 보고 $y_i$를 예측할 수 있도록 유도한다.
 
@@ -136,11 +140,22 @@ Transformer는 세가지 방향으로 multi-head attention을 사용한다.
 
 - "encoder-decoder attention" layer에서 query는 previous decoder layer에서 오며 keys and values는 input sequence에서 참조한다. 이 덕분에 decoder는 input sequence의 모든 위치를 참조할 수 있다.
 - encoder의 self-attention layer의 key, value, query는 모두 전 layer의 출력에서 참조한다. 각각의 위치의 데이터는 모든 위치를 참조한다.
-- decoder의 self-attention layer는 현재 위치와 현재 위치보다 전에 있는 것만 참조한다. 
+- decoder의 self-attention layer는 현재 위치와 현재 위치보다 전에 있는 것만 참조한다. test 단계에서는 뒤를 참조할 수 없기 때문이다.
 
 ### Position-wise Feed-Forward Networks
 
+attention sub-layer의 추가로 fully connected feed-forward network를 연결한다. 이 network는 두 개의 linear transformation로 이루어져있다.
+
+- $FFN(x) = max(0, xW_1 + b_1)W_2 + b_2$
+- $W_1$은 $(d_{model}, d_{ff})$의 크기를 가지고 $W_2$는 $(d_{ff}, d_{model})$ 크기를 가지고 있다.
+
 ### Embeddings and Softmax
 
+다른 sequence transduction model처럼 transformer는 embedding matrix를 input token과 output token을 vector로 바꾸는데 사용한다. 또 linear transformation과 softmax function을 이용해서 decoder output을 next-token probabilities로 바꾼다. transformer에서 두 embedding layer와 softmax 전에 linear transformation에 같은 weight matrix를 사용한다(embedding layer: ($VocabSize$, $d_{model}$), linear transformation: ($d_{model}$, $VocabSize$))
+
+Q. 그러면 input 토큰과 output 토큰을 같은 공간에 embedding하는 건가?
+
 ### Positional Encoding
+
+
 
