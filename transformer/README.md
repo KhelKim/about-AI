@@ -8,10 +8,15 @@
    2. Residual Connction
    3. Batch Normalization and Layer Normalization
 3. Transformer
-   1. Positional Embedding
-   2. Scaled Dot-Product Attention
-   3. Multi Head Self-Attention
-   4. Transformer
+   1. Encoder and Decoder Stacks
+   2. Attention
+      1. Scaled Dot-Product Attention
+      2. Multi-Head Attention
+      3. Applications of Attention in Transformer
+   3. Position-wise Feed-Forward Networks
+   4. Embeddings and Softmax
+   5. Positional Embedding
+4. Summary
 
 ## Introduction of the Transformer
 
@@ -134,7 +139,7 @@ $d_{model}$ 차원을 가진 keys, values, queries보다 keys, values, queries�
 
 논문에서는 $h = 8, d_k = d_v = d_{model}/h = 64$로 설정했다. 각각의 head의 dimension의 개수를 낮춰서 종합적인 계산량은 single-head attention과 비슷하다.
 
-#### Applications of Attention in our Model
+#### Applications of Attention in Transformer
 
 Transformer는 세가지 방향으로 multi-head attention을 사용한다.
 
@@ -155,7 +160,29 @@ attention sub-layer의 추가로 fully connected feed-forward network를 연결�
 
 Q. 그러면 input 토큰과 output 토큰을 같은 공간에 embedding하는 건가?
 
+Jeff님은 안나눴음( https://github.com/graykode/nlp-tutorial/tree/master/5-1.Transformer )
+
 ### Positional Encoding
 
+Transformer는 RNN이나 CNN을 사용하지 않아서 순서에 대한 정보를 따로 저장해주어야한다. 이를 위해 Transformer는 "positional encodings"를 embedding vector에 더한다. Transformer에서는 positional encoding을 위해 sin 함수와 cos 함수를 이용한다.
 
+- $PE_{(pos, 2i)} = sin(pos/10000^{(2i/d_{model})})$
+- $PE_{(pos, 2i+1)} = cos(pos/10000^{(2i/d_{model})})$
+- where $pos$ is the position and $i$ is the dimension (of the embedding vector).
 
+## Summary
+
+![transformer2](https://machinereads.files.wordpress.com/2018/09/real-apply.png?w=720)
+
+1. input sequence는 embedding되고 positional encoding을 통해 위치정보를 함께 가지고 있는 벡터로 변환된다.
+2. encoder에서 Multi-Head Self-Attention layer를 만나 context vector를 출력하고 residual connection과 layer normalization layer를 지나게 된다.
+3. Feed-Forward layer에서 linear transformation과 relu activation function을 지나고 residual connection과 layer normalization layer를 지난다.
+4. 2-3번을 N회 반복하고 encoder output을 생성한다.
+5. output sequence는 embedding되고 positional encoding을 통해 위치정보를 함께 가지고 있는 벡터로 변환된다.
+6. decoder에서 Masked Multi-Head Self-Attention layer를 만나 context vector를 출력하고 residual connection과 layer normalization layer를 지나게 된다.
+7. 전 sublayer output과 encoder output을 input으로 받는 multi-head attention layer를 지나 residual connection과 layer normalization layer를 지난다.
+8. Feed-Forward layer에서 linear transformation과 relu activation function을 지나고 residual connection과 layer normalization layer를 지난다.
+9. 6-7번을 N회 반복하고 decoder output을 생성한다.
+10. decoder output은 linear transformation(transpose of embedding matrix)을 지나고 softmax 함수를 지나 $\hat{z}$(output sequence의 예측값)을 출력한다.
+11. loss 함수와 optimizer를 통해 가중치들을 업데이트한다.
+12. 1-11을 epoch만큼 반복한다.
