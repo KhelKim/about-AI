@@ -21,9 +21,9 @@ Transformer 이전의 sequece transduction model들은 encoder와 decoder를 사
 The word 'scapegoat' comes from an ancient Jewish tradition about a goat. When a Jew wanted to be forgotten for his sins, he had to bring to two goats to a high priest. One goat was sacrificed to God. The priest then laid his hand in the other goat and recited the person's sins. This goat was called a scapegoat. It was sent into the wilderness. The Jew believed it carried the sins away with it.
 ```
 
-위와 같은 문장이 있을 때, 마지막 문장의 it이 의미하는 바를 RNN 구조가 제대로 해석할 수 있을지 생각하면 어려울 것이라 생각된다. 그 이유는 it이 의미하는 goat는 세 문장 전에 나왔고, 세 문장안에는 it의 의미로 헷갈릴 만한 명사들이 많이 등장한다. RNN이 이를 순차적으로 본다면 아마 goat는 LSTM과 GRU Cell에서 서서히 잊혀질 것이다.
+위와 같은 문장이 있을 때, 마지막 문장의 it이 의미하는 바를 RNN 구조가 제대로 해석하기 어렵다. 그 이유는 it이 의미하는 goat는 세 문장 전에 나왔고, 세 문장안에는 it의 의미로 헷갈릴 만한 명사들이 많이 등장하기 때문이다. RNN이 이를 순차적으로 본다면 goat는 LSTM이나 GRU Cell에서 서서히 잊혀질 것이다.
 
-이를 해결하기 위해  Transformer은 기존 sequence transduction model에서 RNN 구조를 버린다. 그리고 encoder에서 긴 input의 각각의 단어가 input의 어떤 단어와 연관성이 높은지 scoring을 하고(Attention Scoring) 이를 decoder에 추가적으로 input에 추가한다. 이 기존과 다른 구조는 RNN 구조를 버림으로서 속도를 얻고, encoder와 decoder의 Attention을 통해  정확도를 얻었다.
+이를 해결하기 위해  Transformer은 기존 sequence transduction model에서 RNN 구조를 사용하지 않는다. 그리고 encoder에서 긴 input의 각각의 단어가 input의 어떤 단어와 연관성이 높은지 scoring을 하고(Self-Attention Scoring) 이를 decoder의 input에 추가한다. 이 기존과 다른 구조는 RNN을 사용하지 않음으로써 속도를 얻고, encoder와 decoder의 Self-Attention을 통해  정확도를 얻었다.
 
 ## Preliminary
 
@@ -31,7 +31,7 @@ The word 'scapegoat' comes from an ancient Jewish tradition about a goat. When a
 
 ![self-attention](./images/self-attention.png)
 
-Self-Attention은 문장에서 각 단어끼리 얼마나 관계가 있는지를 계산해서 반영하는 방법이다. $x_1$의 self-Attention의 출력값인 $c_1$을 어떻게 얻을 수 있는지 알아보자.
+Self-Attention은 문장에서 각 단어끼리 얼마나 관계가 있는지를 계산해서 반영하는 방법이다. self-Attention에서 $x_1$의 출력값인 $c_1$을 어떻게 얻을 수 있는지 알아보자.
 
 1.  $x_1, x_2, x_3, x_4$는 embedding matrix를 통해 $v_1, v_2, v_3, v_4$으로 변환된다.
 2. $e_{1j} = Attention(v_1, v_j)$
@@ -44,19 +44,21 @@ Self-Attention은 문장에서 각 단어끼리 얼마나 관계가 있는지를
 
 ### Residual Connection
 
+[Deep residual learning for image recognition]( https://arxiv.org/pdf/1512.03385.pdf )
+
 ![residual connection](https://t1.daumcdn.net/cfile/tistory/995D29385B13DA5A24)
 
-Residual connection이 보는 깊은 딥러닝의 문제는 다음과 같다. 만약 신경망의 깊이가 3이 가장 적절하다고 가정하자. 이 신경망에 필요 이상으로 layer들이 더 추가된다면 이 layer들은 identity mapping이면 충분하다. 하지만 모델들은 identity mapping을 잘 만들지 못한다(불확실한 정보). 따라서 특정 깊이 이상으로 layer을 추가적으로 늘린다면 오히려 loss가 늘어나게 된다.
+Residual connection이 보는 깊은 딥러닝의 문제는 다음과 같다. 만약 신경망의 깊이가 3이 가장 적절하다고 가정하자. 이 신경망에 3 이상으로 layer들이 더 추가된다면 이 layer들은 identity mapping이면 충분하다. 하지만 모델들은 identity mapping을 잘 만들지 못한다(*불확실한 정보*). 따라서 특정 깊이 이상으로 layer을 추가적으로 늘린다면 오히려 loss가 늘어나게 된다.
 
 Residual connection은 이 문제를 해결하는 방법은 layer의 input이 현재 상태에 비해 얼마나 변해야 되는지를 layer가 훈련하는 것이다. 즉, 우리가 원하는 결과가 $H(x)$라면 layer가 추론하는 값은 $H(x) - x$가 된다. 이 추론값을 $F(x)$라고 한다면, 이 layer에 추가로 $+x$를 해주는 layer을 추가한다면 $F(x)$는 $x$가 변화하는 정도를 학습하면 된다.
 
-만약 구해야하는 $H(x)$의 이상적 mapping이 identity mapping이라면 $F(x)$가 추론해야 하는 것은 zero mapping이다. zero mapping은 solver가 학습하기 더 쉽기에(불확실한 정보) 필요없는 layer라면 zero mapping으로 잘 수렴될 것이다. 실험적으로 learned residual functions는 small response를 가지고 있다.
+만약 구해야하는 $H(x)$의 이상적 mapping이 identity mapping이라면 $F(x)$가 추론해야 하는 것은 zero mapping이다. zero mapping은 solver가 학습하기 더 쉽기에(*불확실한 정보*) 필요없는 layer라면 zero mapping으로 잘 수렴될 것이다. 논문 저자들의 실험적결과로 learned residual functions는 small response를 가지고 있었다.
 
-[Deep residual learning for image recognition]( https://arxiv.org/pdf/1512.03385.pdf )이 논문에는 나오지 않지만 추가적으로 gradient 소실 문제와 폭발 문제를 해결해주기도 한다고 한다(출처, paper, Residual Recurrent Neural Networks for Learning Sequential Representations).
+이 논문에는 나오지 않지만 추가적으로 gradient 소실 문제와 폭발 문제를 해결해주기도 한다고 한다(출처, paper, Residual Recurrent Neural Networks for Learning Sequential Representations).
 
 ### Batch Normalization and Layer Normalization
 
-내용 출처: [layer normalization](https://arxiv.org/pdf/1607.06450.pdf)
+[layer normalization](https://arxiv.org/pdf/1607.06450.pdf)
 
 #### Batch Normalization
 
@@ -87,10 +89,29 @@ Batch normalization의 단점은 1. mini-batch size에 의존하고 2. dynamic R
 
 ## Transformer
 
-### Positional Embedding
+![transformer](./images/transformer.png)
 
-### Scaled Dot-Product Attention
+많은 sequence transduction model은 encoder-decoder structure를 가지고 있다. encoder는 input sequence $(x_1, x_2, \cdots, x_n)$을 연속적인 값을 가진 $z = (z_1, \cdots, z_n)$로 바꾼다. 주어진 $z$에 대해, decoder는 output sequence $(y_1, y_2, \cdots, y_m)$을 출력한다.
 
-### Multi Head Self-Attention
+Transformer는 이런 self-attention과 point-wise, fully connected layer를 이용하여 encoder, decoder 구조를 따른다.
 
-### Transformer
+### Encoder and Decoder Stacks
+
+**Encoder**: encoder는 N개의(논문에서는 N=6) 똑같은 layer로 구성되어 있다. 각 layer는 두가지 sub-layer를 가지고 있다. 첫번째는 multi-head self-attention이고 두번째는 position-wise fully connected feed-forward network이다. 또 residual connection과 layer normalization을 두 sub-layer에 각각 적용했다. 결과적으로 한 layer을 지나 출력된 결과는 $LayerNorm(x + MultiHeadSelfAttention(x))$이다. residual connection을 적용의 편의를 위하여 모든 sub-layers 혹은 embedding layer도 dimension을  $d_{model}$로 일정하게 한다(논문에서는 $d_{model}=512$).
+
+**Decoder**: decoder도 마찬가지고 N개의(논문에서는 N=6) 똑같은 layer로 구성되어 있다. encoder의 두개의 sub-layer에 추가로 세번째 sub-layer를 사이에 추가한다. 이 sub-layer는 encoder stack의 출력값 위에 multi-head attention을 적용한다. encoder와 마찬가지로 residual connection과 layer normalization을 적용한다. self-attention sub-layer는 $y_i$를 예측할 때, 뒤쪽 단어를 보고 예측하지 않을 수 있도록 막는다. 이런 masking은 예측할 때, $i$보다 전에 예측한 출력을 보고 $y_i$를 예측할 수 있도록 유도한다.
+
+### Attention
+
+#### Scaled Dot-Product Attention
+
+#### Multi-Head Attention
+
+#### Applications of Attention in our Model
+
+### Position-wise Feed-Forward Networks
+
+### Embeddings and Softmax
+
+### Positional Encoding
+
