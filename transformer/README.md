@@ -103,9 +103,32 @@ Transformer는 이런 self-attention과 point-wise, fully connected layer를 이
 
 ### Attention
 
+transformer에서는 Sacled Dot-Product Attention과 Multi-Head Attention을 사용한다.
+
+![attention](./images/attention.png)
+
 #### Scaled Dot-Product Attention
 
+![self-attention](./images/self-attention.png)
+
+Attention에 들어오는 query와 key의 dimension을 $d_k$, value의 dimension을 $d_v$라고 하자. 이 Scaled Dot-Product의 Attention Score는 $AttentionScore(query, key) = \frac{query \cdot key}{\sqrt{d_k}}$이다. 대표적인 Attention-Score 함수는 additive attention과 dot-product attention이 있다. 두 attention score함수는 이론상 complexity는 같지만 dot-product attention이 matrix multiplication이 되기 때문에 더 빠르다.
+
+$d_k$가 작은 경우에는 두 attention이 비슷하지만, $d_k$가 크다면, additive attention이 dot product attention보다 성능이 좋다. $d_k$가 크다면, dot product의 크기는 매우 커지고, 그렇다면 softmax 함수의 출력값이 매우 작아지게 된다. 이를 상쇄하기 위해서 논문에서는 $\sqrt{d_k}$로 dot product를 나눠주었다.
+
+따라서 $x_1$의 context vector인 $c_1$는 다음과 같다.
+
+- $v := embedding((x_1, x_2, x_3, x_4))$
+- $\alpha := softmax((v[1] \cdot v[1], v[1] \cdot v[2], v[1] \cdot v[3], v[1] \cdot v[4]) / \sqrt{d_k})$
+- $c_1 = \sum^4_{j=1} \alpha_{1j} v_j \text{ where } \alpha_{1j}:= \alpha[j] \text{ and } v_j := v[j]$ 
+
+이 과정을 matrix로 표현하면 다음과 같다.
+
+- $Q := [v_1, v_2, v_3, v_4], K := Q, V:= Q$
+- $Attention(Q, K, V) = softmax(\frac{QK^T}{\sqrt{d_k}})V$
+
 #### Multi-Head Attention
+
+
 
 #### Applications of Attention in our Model
 
