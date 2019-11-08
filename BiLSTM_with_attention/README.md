@@ -4,9 +4,21 @@
 
 ## Index
 
-1. embedding layer
-2. Bidirectional-lstm layer
-3. attention layer
-4. dense layers
+1. BiLSTM with Attention
+   1. Embedding Layer
+   2. Bidirectional-LSTM Layer
+   3. Attention Layer
+   4. Dense Layers
 
-## ㅑI
+
+## BiLSTM with Attention
+
+![bilstm with attention](./images/bilstm_with_attention.png)
+
+### Embedding Layer
+
+### Bidirectional-LSTM Layer
+
+### Attention Layer
+
+### Dense Layers
