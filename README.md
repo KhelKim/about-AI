@@ -26,6 +26,7 @@
    3. BiLSTM
 4. [BiLSTM with Attentioin]( https://github.com/KhelKim/basic-nlp/tree/master/BiLSTM_with_attention )
    1. BiLSTM with Attention
+   2. Summary
 5. [Transformer]( https://github.com/KhelKim/basic-nlp/tree/master/transformer  )
    1. Introduction of Transformer
    2. Preliminary
