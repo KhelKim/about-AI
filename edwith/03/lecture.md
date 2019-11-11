@@ -151,3 +151,4 @@ RN는 단어의 순서쌍의 가중치가 모두 1인데, neural network가 가�
 - Sentence representation
   - How do we extract useful representation from a sentence?
   - We learned five different ways to do so: CBoW, RN, CNN, Self-Attention, RNN
+
