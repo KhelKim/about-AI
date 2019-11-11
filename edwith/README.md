@@ -14,14 +14,12 @@
    7. Backpropagation
    8. Gradient-Based Optimization
    9. Summary
-   10. Questions
 3. [Text Classification & Sentence Representation]( https://github.com/KhelKim/basic-nlp/tree/master/edwith/03 )
    1. Overview
    2. How to represent sentence & token?
    3. CBoW & RN & CNN
    4. Self Attention & RNN
    5. Summary
-   6. Questions
 4. [Neural Language Models]( https://github.com/KhelKim/basic-nlp/tree/master/edwith/04 )
    1. Overview: Language Modelling
    2. Autoregressive language modelling
