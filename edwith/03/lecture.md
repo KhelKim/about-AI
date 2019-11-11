@@ -7,7 +7,6 @@
 3. CBoW & RN & CNN
 4. Self Attention & RNN
 5. Summary
-6. Questions
 
 ## Overview
 
@@ -97,6 +96,58 @@
 
 ## Self Attention & RNN
 
+### How to represent a sentence - Self-Attention
+
+CNN의 단점: 아주 긴 sequence의 첫번째와 마지막이 dependency가 있다면 CNN이 캡쳐하기 어렵다.
+
+RN의 단점: 모든 단어의 쌍을 보기 때문에 효율적이지 못하다.
+
+RN는 단어의 순서쌍의 가중치가 모두 1인데, neural network가 가중치를 학습할 수 있을까?
+
+- Can we compute those weights instead of fixing them to 0 or 1?
+- That is, compute the weight of each pair $(x_t, {x_t'})$
+  - $h_t = \sum^{T}_{t'=1}\alpha(x_t, x_{t'}) f(x_t, x_{t'})$
+- The weighting function could be yet another neural network
+  - Just another subgraph in a DAG: easy to use
+    - $\alpha(x_t, x_{t'}) = \sigma(RN(x_t, x_{t'})) \in [0, 1]$
+  - Perhaps, we want to normalize them so that the weights sum to one
+    - $\alpha(x_t, x_{t'}) = \frac{exp(\beta(x_t, x_{t'}))}{\sum^T_{t''=1}exp(\beta(x_t, x_{t''}))}, \text{ where } \beta(x_t, x_{t'}) = RN(x_t, x_{t'})$
+- Self-Attention: a generalization of CNN and RN.
+- Able to capture long-range dependencies within a single layer.
+- Able to ignore ireelevant long-range dependencies.
+- Further generalization via multi-head and multi-head attention
+
+- Weaknesses of self-attention
+  1. Quadratic computational complexity of $O(T^2)$
+  2. Some operations cannot be done easily: e.g. counting, ....
+
+### How to represent a sentence - RNN
+
+- Online compression of a sequence $O(T)$
+  - $h_t = RNN(h_{t-1}, x_t), \text{ where } h_0 = 0.$
+- 문장이 길어지면 하나의 vector로 compress하기 어려움
+- Bidirectional RNN to account for both sides.
+- Inherently sequential processing
+  - Less desirable for modern, parallelized, distributed computing infrastructure
+  - 문장의 한단어씩 봐야하기 분산 계산을 할 수 없다.
+- LSTM and GRU have become de facto standard
+  - All standard frameworks impolement them.
+  - Efficient GPU kernels are available.
+
 ## Summary
 
-## Questions
+### How to represent a sentence
+
+- We have learned five ways to extract a sentence representation:
+  - In all but CBoW, we end up with a set of vector representations. $H= {h_1, \cdots, h_T}$
+  - These approaches could be "stacked" in an arbitrary way to improve performance.
+  - These vectors are often averaged for classification
+
+### We learned in this lecture...
+
+- Token representation
+  - How do we represent a discrete token in a neural network?
+  - Training this neural network leads to so-called continuous word embedding.
+- Sentence representation
+  - How do we extract useful representation from a sentence?
+  - We learned five different ways to do so: CBoW, RN, CNN, Self-Attention, RNN
