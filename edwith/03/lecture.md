@@ -1,4 +1,4 @@
-# Text Classification & Sentence Representation
+# Text Classification & Sentence Representation, 강의 노트
 
 ## INDEX
 
@@ -89,7 +89,7 @@
   - Fits our instuition of how sentence is understood: tokens -> mulit-word expressions -> phrases -> sentence
   - In practice, just another operation in a DAG:
     - Extremely efficient implementations are available in all of the major of frameworks.
-  - Reccent advances
+  - Recent advances
     - Multi-width convolutional layers [Kim, 2014; Lee et al., 2017]
     - Dilated convolutional layers [Kalchbrenner et al., 2016]
     - Gated convolutional layers [Gehring et al, 2017]
@@ -114,7 +114,7 @@ RN는 단어의 순서쌍의 가중치가 모두 1인데, neural network가 가�
     - $\alpha(x_t, x_{t'}) = \frac{exp(\beta(x_t, x_{t'}))}{\sum^T_{t''=1}exp(\beta(x_t, x_{t''}))}, \text{ where } \beta(x_t, x_{t'}) = RN(x_t, x_{t'})$
 - Self-Attention: a generalization of CNN and RN.
 - Able to capture long-range dependencies within a single layer.
-- Able to ignore ireelevant long-range dependencies.
+- Able to ignore irrelevant long-range dependencies.
 - Further generalization via multi-head and multi-head attention
 
 - Weaknesses of self-attention
@@ -139,7 +139,7 @@ RN는 단어의 순서쌍의 가중치가 모두 1인데, neural network가 가�
 ### How to represent a sentence
 
 - We have learned five ways to extract a sentence representation:
-  - In all but CBoW, we end up with a set of vector representations. $H= {h_1, \cdots, h_T}$
+  - In all but CBoW, we end up with a set of vector representations. $H= \{h_1, \cdots, h_T\}$
   - These approaches could be "stacked" in an arbitrary way to improve performance.
   - These vectors are often averaged for classification
 
