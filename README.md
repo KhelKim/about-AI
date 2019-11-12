@@ -35,3 +35,5 @@
       3. Batch Normalization and Layer Normalization
    3. Transformer
 6. [Bert]( https://github.com/KhelKim/basic-nlp/tree/master/bert )
+
+[appendix](https://github.com/KhelKim/basic-nlp/tree/master/appendix)
