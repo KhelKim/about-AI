@@ -119,15 +119,15 @@ Loss function은 deep learning layers가 출력한 output이 실제 y와 얼마�
 
 loss function의 극솟값을 찾기 위해 loss function을 $\Theta$ space에 대해 미분하고 미분값이 0이 되는 점들 찾고 조사할 수도 있지만 미분값이 0이 되는 지점을 찾는 것은 계산 비용이 너무 많이 든다.
 
-차선책으로 $\Theta$ space에서 임의의 vector 하나를 추출하고 이 vector에서 가장 가파른 방향(gradient)으로 조금씩 내려가는 방법을 사용한다. 이는 loss function이 $\Theta$ space에 대해 최적점이 하나(local minimum = global minimum)라면 수렴성이 보장되지만, 안타깝게도 우리가 푸는 문제들은 대게 그렇지 못하다. 따라서 임의의 한 시작점에서 가장 가파른 방향으로 조금씩 내려가다가 local minimum에 도착하더라도 이 지점을 통과하여 global minimum을 향해 가기 위한 방법이 연구되고 있다.
+차선책으로 $\Theta$ space에서 임의의 vector 하나를 추출하고 이 vector에서 가장 가파른 방향(gradient)으로 조금씩 내려가는 방법을 사용한다. 이는 loss function이 $\Theta$ space에 대해 최적점이 하나(local minimum = global minimum)라면 수렴성이 보장되지만, 안타깝게도 우리가 푸는 문제들은 대게 그렇지 못하다. 이를 위해 임의의 한 시작점에서 가장 가파른 방향으로 조금씩 내려가다가 local minimum에 도착하더라도 이 지점을 통과하여 global minimum을 향해 가기 위한 방법들이 연구되고 있다.
 
 ### Gradient
 
-우리가 loss function의 최적점을 찾기 위해 쓸 수 있는 방법은 $\Theta$ space에서 임의의 vector 하나를 추출하고 이 vector에서 가장 가파른 방향(gradient)으로 조금씩 내려가는 방법 밖에 없지만, 이것도 문제가 있다.
+우리가 넓은  $\Theta$ space에서 loss function의 최적점을 찾기 위해 쓸 수 있는 방법은 $\Theta$ space에서 임의의 vector 하나를 추출하고 이 vector에서 가장 가파른 방향(gradient)으로 조금씩 내려가는 방법 밖에 없지만, 이것도 문제가 있다.
 
-Loss function의 gradient를 구하기 위해서 loss function을 $\Theta$ space의 기저들의 방향으로 derivative를 구해야한다. 이때 계산에 영향을 주는 것은 1. $\Theta$ space의 기저의 개수 2. 데이터의 개수가 있다. 
+Loss function의 gradient를 구하기 위해서 loss function을 $\Theta$ space의 기저들의 방향으로 derivative를 구해야하는데 계산량에 영향을 주는 것은 1. $\Theta$ space의 기저의 개수 2. 데이터의 개수가 있다. 
 
-$\Theta$ space의 기저의 개수는 deep learning layers의 가중치의 개수와 같은데 DNN의 가중치의 개수와 데이터의 개수를 고려해볼 땐 엄청난 계산량이 필요하다는 것을 알 수 있다. 이 계산량을 줄이기 위해서는 1. $\Theta$ space의 기저의 개수를 줄이가나 2. 데이터의 개수를 줄여야한다.
+$\Theta$ space의 기저의 개수는 deep learning layers의 가중치의 개수와 같은데 DNN의 가중치의 개수와 데이터의 개수를 고려해볼 땐 엄청난 계산량이 필요하다는 것을 알 수 있다. 이 계산량을 줄이기 위해서는 당연하게도 1. $\Theta$ space의 기저의 개수를 줄이가나 2. 데이터의 개수를 줄여야한다.
 
 $\Theta$ space의 기저의 개수는 deep learning layers의 가중치의 개수와 같기 때문에 이 기저의 개수를 줄인다는 것은 DNN 모델을 바꾼다는 것과 같은 의미임으로 기저의 개수를 줄이는 것은 고려하지 않는다.
 
