@@ -195,3 +195,7 @@ epoch=1
 #### Problem: predict the output value of $X = [1, 2, 3, 4]$.
 
 #### Problem: explain why the vanishing or exploding of gradient occurs.
+
+![practice1](./images/practice1.png)
+
+![practice2](./images/practice2.png)
