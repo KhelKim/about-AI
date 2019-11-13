@@ -184,12 +184,14 @@ $\Theta$ space의 기저의 개수는 deep learning layers의 가중치의 개�
 
 ### Optimizer
 
-- Basic Optimizer
+- Do not use any optimizer.
 - $\eta = 0.1$
 
-### Minor Hyperparameter
+### Other Hyperparameters
 
 epoch=1
+
+![pratice](./images/practice.png)
 
 #### Problem: predict the output value of $X = [1, 2, 3, 4]$
 
