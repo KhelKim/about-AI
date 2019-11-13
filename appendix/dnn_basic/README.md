@@ -1,4 +1,4 @@
-# Deep Learning
+# DNN Basic
 
 DNN learning에서 일어나는 일들을 간략히 살펴보자.
 
@@ -164,7 +164,6 @@ $\Theta$ space의 기저의 개수는 deep learning layers의 가중치의 개�
     X_{11} & X_{12}  \\
     X_{21} & X_{22}  \\
     X_{31} & X_{32}  \\
-    X_{41} & X_{42} \\
     \end{bmatrix}$
       - $X$: input data
       - n of row: the number of attributes of a data
@@ -193,5 +192,6 @@ epoch=1
 
 ![pratice](./images/practice.png)
 
-#### Problem: predict the output value of $X = [1, 2, 3, 4]$
+#### Problem: predict the output value of $X = [1, 2, 3, 4]$.
 
+#### Problem: explain why the vanishing or exploding of gradient occurs.
