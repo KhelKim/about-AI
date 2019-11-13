@@ -17,6 +17,8 @@
 
 ![bilstm with attention](./images/bilstm_with_attention.png)
 
+(그림의 dense layer의 차원이 뒤바뀌어야 함)
+
 위 논문은 Classification 문제를 해결하기 위해 LSTM-Attention 모델과 BiLSTM-Attention 모델을 사용한 논문이다. 구조를 살펴보면 다음과 같다.
 
 1. 문장의 단어들을 embedding 한다.
@@ -72,6 +74,8 @@ LSTM와 BiLSTM에서 출력된 두개의 확률분포를 soft voting을 해서 c
 위에 언급된 layer의 구동방식에 따라 BiLTM with Attention classification은 다음과 같이 진행된다.
 
 ![bilstm with attention](./images/bilstm_with_attention.png)
+
+(그림의 dense layer의 차원이 뒤바뀌어야 함)
 
 1. 문장의 단어들을 embedding 한다.
 2. embedding된 벡터들을 RNN Cell(BiLSTM 혹은 LSTM)에 넣는다.

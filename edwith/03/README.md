@@ -69,7 +69,7 @@ Dog, wolf, cat, tiger처럼 각 단어가 왜 저런 알파벳의 나열인지 �
   - $f(x_i, x_j) = W \phi(U_{left}e_i + U_{right}e_j)$
   - $\phi$ is a element-wise nonlinear function, such as tanh or ReLU
 - 이를 pair의 relationship vector라 하고 이를 합해서 평균내면 RN의 출력 vector가 된다.
-  - $RN(X) = \frac{1}{2N(N-1)}\sum^{T-1}_{i=1}\sum^{T}_{j=i+1}f(x_i, x_j)$
+  - $RN(X) = \frac{2}{N(N-1)}\sum^{T-1}_{i=1}\sum^{T}_{j=i+1}f(x_i, x_j)$
 - 계산 비용이 많이 들겠지만 pair 뿐만 아니라 3개 혹은 4개 이상의 묶음도 생각할 수 있다.
 
 ### CNN,  Convolutional Neural Network
@@ -106,9 +106,17 @@ RN의 단점: 문장에 대한 모든 단어의 순서쌍이 가지고 있는 �
 - 또, irrelevent long-range depenencies를 무시할 수 있다.
 - multi-head와 multi-head attention을 통해 더 확장할 수 있다.
 - self-attention의 약점:
-  - Quadratix computational complexity, $O(T^2)$
+  - Quadratic computational complexity, $O(T^2)$
 
 ### RNN
+
+- Linear compuational complexity, $O(T)$
+  - $h_t = RNN(h_{t-1}, x_t), \text{ where } h_0 = 0.$
+- 문장이 길어지면 하나의 vector로 compress하기 어렵다.
+- Bidirectional RNN을 이용하여 양쪽 방향에서 확인할 수는 있다.
+- 상속적이고 연속적인 프로세싱이다.
+  - 문장의 한 단어 씩 봐야하기 때문에 분산 계산을 할 수 없다.
+- 대표적으로 LSTM과 GRU가 있다.
 
 ## Summary
 
