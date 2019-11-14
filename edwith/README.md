@@ -27,18 +27,15 @@
    4. Neural N-Gram Language Model
    5. Long Term Dependency
    6. Summary
-   7. Questions
 5. [Neural Machine Translation]( https://github.com/KhelKim/basic-nlp/tree/master/edwith/05 )
    1. Overview: a bit of history remark
    2. Encoder & Decoder
    3. RNN Neural Machine Translation
-   4. Questions
 6. [Case Study]( https://github.com/KhelKim/basic-nlp/tree/master/edwith/06 )
    1. Learning to Describe Multimedia
    2. Fully Character-Level Machine Translation
    3. Meta-Learning of Low-Resource Neural Machine Translation
    4. Real-Time Translation Learning to Decode
-   5. Questions
 7. [Finishing the lecture]( https://github.com/KhelKim/basic-nlp/tree/master/edwith/07 )
    1. Finishing the lecture
 
