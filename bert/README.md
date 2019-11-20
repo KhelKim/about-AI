@@ -23,7 +23,7 @@
 
 ## Introduction of BERT
 
-BERT는 **B**idirectional **E**ncoder **R**epresentations from **T**ransformers의 약자로서 pre-trained language representation 모델 중 하나다. BERT가 지적하는 기존 pre-trained language representation 모델들은 unidirectional 모델이라는 것이다. 이런 모델은 question answering같은 문맥 전체를 중요하게 봐야하는 문제에 대해서는 치명적이다. BERT는 "masked language model" (MLM)과 "next sentence prediction" (NSP)을 사용하여 이 문제를 해결한다. MLM은 input의 token 중 몇 단어를 가린 후 남은 단어를 이용하여 가린 단어를 예측하는 모델이다. NSP는 input으로 두 개의 문장이 들어올 때 두 번째 문장이 첫 번째 문장과 상관이 있는지 없는지 판단하며 주어진 input을 이해한다. MLM과 NSP는 뒤에서 자세하게 다루겠다.
+BERT는 **B**idirectional **E**ncoder **R**epresentations from **T**ransformers의 약자로서 pre-trained language representation 모델 중 하나다. BERT가 지적하는 기존 pre-trained language representation 모델들은 unidirectional 모델이라는 것이다. 이런 모델은 question answering같은 문맥 전체를 중요하게 봐야하는 문제에 대해서는 치명적이다. BERT는 "masked language model" (MLM)과 "next sentence prediction" (NSP)을 사용하여 이 문제를 해결한다. MLM은 input의 token 중 몇 단어를 가린 후 남은 단어를 이용하여 가린 단어를 예측하는 모델이다. NSP는 input으로 두 개의 문장이 들어올 때 첫 번째 문장과 두 번째 문장이 상관이 있는지 없는지 판단하며 주어진 input을 이해한다. MLM과 NSP는 뒤에서 자세하게 다루겠다.
 
 ## Preliminary
 
@@ -133,9 +133,9 @@ BERT의 모델 구조는 Transformer encoder를 여러개 쌓은 모습을 하�
 - L: the number of transformer encoder layers
 - H: the hidden size
 - A: the number of self-attention heads
-- $BERT_{BASE}: L=12, H=768, A=12, total_parameters=110M$
+- $BERT_{BASE}: L=12, H=768, A=12, total_{parameters}=110M$
   - $BERT_{BASE}$는 Open AI의 GPT와 비슷한 parameter 개수를 갖게 조정한 모델이다.
-- $BERT_{LARGE}: L=24, H=1024, A=16, total_parameters=340M$
+- $BERT_{LARGE}: L=24, H=1024, A=16, total_{parameters}=340M$
 
 ### Input/Output Representations
 
@@ -189,7 +189,7 @@ Fine-tuning은 pre-training과 비교해서 계산 비용이 적게 든다고 �
 
 ### GLUE
 
-GLUE의 input은 single sentence가 들어올 수도 있고, sentence pairs가 들어올 수도 있다. GLUE 문제를 해결하기 위해서 우리는 [CLS]의 출력 vector인 $C \in \mathbb{R}$를 이용할 것이다. $C$를 input sentence(s)의 내용을 함축적으로 가지고 있는 벡터로 만들어서(Transformer 덕분에 가능) output을 출력할 때는 classification layer weights $W \in \mathbb{R}^{K\times H}, \text{ where } K \text{ is the number of labels }$만 추가한다면, GLUE의 classification 문제를 해결할 수 있다.
+GLUE의 input은 single sentence가 들어올 수도 있고, sentence pairs가 들어올 수도 있다. GLUE 문제를 해결하기 위해서 우리는 [CLS]의 출력 vector인 $C \in \mathbb{R}^H$를 이용할 것이다. $C$를 input sentence(s)의 내용을 함축적으로 가지고 있는 벡터로 만들어서(Transformer 덕분에 가능) output을 출력할 때는 classification layer weights $W \in \mathbb{R}^{K\times H}, \text{ where } K \text{ is the number of labels }$만 추가한다면, GLUE의 classification 문제를 해결할 수 있다.
 
 ### SQuAD v1.1
 
@@ -198,4 +198,3 @@ Question answering task를 해결할 때는, variable $S \in \mathbb{R}^H$와 $E
 ### SWAG
 
 SWAG dataset을 위해 fine-tuning을 한다면, 주어진 sentence(sentence A)와 possible continuation(sentence B)을 이은 4개의 input sequece를 만들고 각 sequence의 $C$를 구한다. 이 각각의 $C$와 내적할 수 있는 Task specific parameters를 추가로 variable을 이용해 만들고 이 vector와 C의 내적 결과를 이용해 softmax score를 구해 실제 값과 비교하면 SWAG에 맞는 fine tuning을 할 수 있다.
-
