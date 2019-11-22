@@ -1,6 +1,6 @@
 # BiLSTM with Attention
 
-[논문]( https://www.aclweb.org/anthology/W18-6226/ )
+[논문](https://www.aclweb.org/anthology/W18-6226/)
 
 ## Index
 
@@ -39,9 +39,9 @@ RNN Cell layer는 뉴런의 개수는 400이 LSTM과 BiLSTM을 사용하고 벡�
 
 ### Attention Layer
 
-[참조 논문]( http://ceur-ws.org/Vol-2086/AICS2017_paper_10.pdf )
+[참조 논문](http://ceur-ws.org/Vol-2086/AICS2017_paper_10.pdf)
 
-[참조 블로그](https://lovit.github.io/machine%20learning/2019/03/17/attention_in_nlp/ )
+[참조 블로그](https://lovit.github.io/machine%20learning/2019/03/17/attention_in_nlp/)
 
 Attention layer를 통해 각각의 단어가 tweet의 감정에 얼마나 영향을 끼치는지 파악하고 이를 축약할 수 있다. t번째 tweet sentence의 i번째 word는 RNN Cell을 통해 $h_{ti}$로 변환되고 이는 먼저 MLP를 지나고 $tanh$ 활성화 함수를 거쳐 $u_{ti}$로 변환된다.
 

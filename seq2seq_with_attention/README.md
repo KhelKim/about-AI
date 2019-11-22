@@ -66,7 +66,7 @@
 
 ![BLSTM](./images/BLSTM.png)
 
-Attention 개념이 처음나온 [이 논문]( https://arxiv.org/abs/1409.0473 )에서 encoder 부분에 BiLSTM을 사용한다. BiLSTM이 언급된 김에 정리하고 넘어가자.
+Attention 개념이 처음나온 [이 논문](https://arxiv.org/abs/1409.0473)에서 encoder 부분에 BiLSTM을 사용한다. BiLSTM이 언급된 김에 정리하고 넘어가자.
 
 ### BiRNN
 

@@ -49,7 +49,7 @@ Self-Attention은 문장에서 각 단어끼리 얼마나 관계가 있는지를
 
 ### Residual Connection
 
-[Deep residual learning for image recognition]( https://arxiv.org/pdf/1512.03385.pdf )
+[Deep residual learning for image recognition](https://arxiv.org/pdf/1512.03385.pdf)
 
 ![residual connection](https://t1.daumcdn.net/cfile/tistory/995D29385B13DA5A24)
 
@@ -160,7 +160,7 @@ attention sub-layer의 추가로 fully connected feed-forward network를 연결�
 
 Q. 그러면 input 토큰과 output 토큰을 같은 공간에 embedding하는 건가?
 
-Jeff님은 안나눴음( https://github.com/graykode/nlp-tutorial/tree/master/5-1.Transformer )
+Jeff님은 안나눴음(https://github.com/graykode/nlp-tutorial/tree/master/5-1.Transformer)
 
 ### Positional Encoding
 
