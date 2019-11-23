@@ -42,4 +42,4 @@
    3. BERT
    4. Experiments
 
-[appendix](https://github.com/KhelKim/basic-nlp/tree/master/appendix)
+- [appendix](https://github.com/KhelKim/basic-nlp/tree/master/appendix)
