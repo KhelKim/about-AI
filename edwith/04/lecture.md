@@ -142,11 +142,103 @@ c(x_{-N}, \cdots, x), & \mbox{otherwise }
 
 ## Neural N-Gram Language Model
 
+- Neural N-gram Language Model[bengio et al. 2001]: The first extension of n-gram language models using a neural network
 
+  ![Neural N-Gram Language Model](./images/neural_n_gram_language_model.png)
+
+- Trained using backpropagation and SGD: see Lecture 1
+
+- Generalizes to an unseen n-gram
+
+- Addresses the issue of data sparsity
+  - How?
+  - Why does the data sparsity happen?
+  - A "shallow" answer: some n-grams do not occur in the training data, while they do in the test time.
+  - A "slightly deeper" answer: it is difficult to impose token/phrase similarities in the discrete space
+    - We need the continuous space using neural networks
+  
+- In practice,
+  1. Collect all n-grams from the corpus.
+  2. Shuffle all the n-gramse to build a training set
+  3. Train the neural n-gram language model using stochastic gradient descent on minibatches containing 100-1000 n-grams.
+  4. Early-stop based on the validation set.
+  5. Report perplexity on the test set.
+     - $ppl = b^{\frac{1}{|D|}\sum_{(x_1, \cdots, x_N) \in D}\operatorname{log}_bp(x_N|x_1, \cdots, x_{N-1})}$
+     - ppl의 의미: context를 봤을 때, 그 다음 단어를 얼마나 작은 subset 안에서 고를 수 있는지를 알려줌
+     - perplexity가 1이면 다음에 나올 단어가 무엇인지 완벽하게 안다는 것
+     - perplexity가 10이면 다음에 나올 단어가 10개 내외에서 무엇인지 안다는 것
 
 ## Long Term Dependency
 
+Neural N-Gram Language Model이 data spasity문제는 해결해주지만 long term dependency문제는 해결해주지 못한다.
 
+- n이 커지면 parameter가 늘어나고 늘어난 parameter가 제대로 학습되려면 data가 많아져야한다. 
+
+### Solution1, Increasing the context size - Convolutional Language Models
+
+- Dilated convolution to rapidly increase the window size
+
+  ![dilatee convolution](https://miro.medium.com/max/395/0*3cTXIemm0k3Sbask.gif)
+
+  출처:  https://towardsdatascience.com/review-dilated-convolution-semantic-segmentation-9d5a5bd768f5 
+
+  - Exponential-growth of the window by introducing, a multiplicative factor
+  - By carefully selecting the multiplicative factor, no loss in the information
+
+- Causal convolution: the future tokens cannot be sused.
+
+  - Computation as usual: efficiency
+  - Clever masking of future tokens: causality
+
+- Efficient computation + larger context
+
+### Causal sentence representation and language modelling
+
+- Any sentence representation learning method from Lecture 2 could be used as long as it does not break the generative story
+- In addition to the feedforward and convolutional n-gram language models, we can use any of the remaining sentence representation.
+
+### Infinite context - CBoW Language Models
+
+- Equivalent to the neural LM after replacing "concat" with "average"
+  - "Averaging" allows the model to consider the infinite large context window.
+- Extremely efficient, but a weak language model
+  - Ignores the order of the tokens in the context windows.
+    - Any language with a fixed order cannot be modelled well.
+  - Averaging ignores the absolute counts, which may be important;
+    - If the context window is larger, "verb" becomes less likely in SVO languages.
+
+### Infinite context - Recurrent Language Models [Mikolov et al., 2010]
+
+- A recurrent network summarizes all the tokens so far.
+- Use the recurrent network's memory to predict the next token.
+- Efficient online processing of a stream text:
+  - Constant time per step.
+  - Constant memory throughout forward computation
+- Useful in practice:
+  - Useful for autocomplete and keyword suggestion.
+  - Scoring partial hypotheses in generation.
+- The recurrent network solves a difficult problem: compress the entire context into a fixed-size memory vector.
+- Self-attention does not require such compression but still can capture long-term dependencies.
+- Combine these two: a recurrent memory network 
 
 ## Summary
+
+### In this lecture, we learned
+
+- What autoregressive language modelling is:
+
+  $p(X) = p(x_1)p(x_2|x_1)\cdots p(x_T|x_1, \cdots, x_{T-1})$
+
+- How auto regressive language modelling transforms unsupervised learning into a series of supervised learning:
+
+  - It is a series of predicting the next token given previous tokens.
+
+- How neural language modelling improves upon n-gram language models:
+
+  - Continuous vector space facilitates generalization to unseen n-grams.
+  - Infinitely large context window
+
+- How sentence representation extraction is used for language modelling:
+
+  - Convolutional language model, recurrent language models and self-attention language models.
 
