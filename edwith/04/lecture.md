@@ -159,7 +159,7 @@ c(x_{-N}, \cdots, x), & \mbox{otherwise }
   
 - In practice,
   1. Collect all n-grams from the corpus.
-  2. Shuffle all the n-gramse to build a training set
+  2. Shuffle all the n-grams to build a training set
   3. Train the neural n-gram language model using stochastic gradient descent on minibatches containing 100-1000 n-grams.
   4. Early-stop based on the validation set.
   5. Report perplexity on the test set.
@@ -185,7 +185,7 @@ Neural N-Gram Language Model이 data spasity문제는 해결해주지만 long te
   - Exponential-growth of the window by introducing, a multiplicative factor
   - By carefully selecting the multiplicative factor, no loss in the information
 
-- Causal convolution: the future tokens cannot be sused.
+- Causal convolution: the future tokens cannot be used.
 
   - Computation as usual: efficiency
   - Clever masking of future tokens: causality
@@ -240,5 +240,5 @@ Neural N-Gram Language Model이 data spasity문제는 해결해주지만 long te
 
 - How sentence representation extraction is used for language modelling:
 
-  - Convolutional language model, recurrent language models and self-attention language models.
+  - Convolutional language models, recurrent language models, and self-attention language models.
 
