@@ -9,4 +9,5 @@
    4. Optimizer
    5. Practice
 
-2. Pytorch Tutorial
+2. [Pytorch Tutorial](https://github.com/KhelKim/basic-nlp/tree/master/appendix/pytorch_tutorial)
+
