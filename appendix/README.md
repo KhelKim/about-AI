@@ -9,3 +9,4 @@
    4. Optimizer
    5. Practice
 
+2. Pytorch Tutorial
