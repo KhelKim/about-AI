@@ -35,7 +35,7 @@
       3. Batch Normalization and Layer Normalization
    3. Transformer
 6. [Bert](https://github.com/KhelKim/basic-nlp/tree/master/bert)
-1. Introduction of BERT
+   1. Introduction of BERT
    2. Preliminary
       1. Feature-Based Approaches vs. Fine-Tuning Approaches
       2. WordPiece Embeddings
