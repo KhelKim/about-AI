@@ -36,6 +36,4 @@
    2. Fully Character-Level Machine Translation
    3. Meta-Learning of Low-Resource Neural Machine Translation
    4. Real-Time Translation Learning to Decode
-7. [Finishing the lecture]( https://github.com/KhelKim/basic-nlp/tree/master/edwith/07 )
-   1. Finishing the lecture
 
