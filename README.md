@@ -1,5 +1,7 @@
 # BASIC NLP
 
+## Index
+
 0. [Basic's basic](https://github.com/KhelKim/basic-nlp/tree/master/basic)
    1. NLP 기초1
    2. NLP 기초2
