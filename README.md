@@ -13,8 +13,7 @@
    3. Text Classification & Sentence Representation
    4. Neural Language Models
    5. Neural Machine Translation
-   6. Case Study
-   7. Finishing the lecture
+   6. Case Study(나중에 더 자세히)
 2. [Seq2Seq](https://github.com/KhelKim/basic-nlp/tree/master/seq2seq)
    1. Seq2Seq 개요
    2. Preliminary
