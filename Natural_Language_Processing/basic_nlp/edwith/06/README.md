@@ -11,9 +11,9 @@
 
 ### Description Generation
 
-Machine Translation은 다른 "mode"(ex. image, video, etc. ...) 즉, multimedia content가 주어졌을 때,  그 content를 설명해 주는 것도 가능하다.
-
 key idea: input에 입력되는 것이 굳이 sentence일 필요가 있을까? 이미지, 비디오, speech가 들어오더라도 continuous vector 바꾸기만 하면 machine translation 구조를 사용할 수 있을 것이다.
+
+Machine Translation은 다른 "mode"(ex. image, video, etc. ...) 즉, multimedia content가 주어졌을 때,  그 content를 설명해 주는 것도 가능하다.
 
 ### Image Caption Generation
 
@@ -33,7 +33,7 @@ Attention weight을 사용한다면 description의 어떤 단어가 어떤 plot�
 
 ### Speech Recognition
 
-image, video와 같이 speech recognition을 할 수 있다.
+image, video와 같이 파동을 파악하여 speech recognition을 할 수 있고 attention mechanism으로 어떤 파동이 어떤 단어와 연관이 있는지도 파악할 수 있다.
 
 ## Fully Character-Level Machine Translation
 
@@ -47,6 +47,8 @@ Neural network에게는 sentence는 one-hot vector로 이루어진 sequence일 �
    - 또, 합성어들의 count가 현저하게 낮아, model이 의미를 파악하기 어려울 수 있다.
 2. Misspelling
    - User가 만들어내는 contents에는 오타가 있을 수 있다.
+   - 오타가 많은 언어들은 vocabulary 사이즈가 엄청나게 커질 수 있다.
+   - 또, 오타들의 count가 현저하게 낮아, model이 의미를 파악하기 어려울 수 있다.
 3. Modeling inefficiency
    - vocabulary를 구성하는 단어들 중에는 복잡한 뜻을 가진 단어들이 있을 수 있지만 이를 모두 같은 공간(변수의 개수가 일정한)에 넣는 것은 합리적이지 못하다.
 
@@ -57,14 +59,14 @@ Neural network에게는 sentence는 one-hot vector로 이루어진 sequence일 �
 하지만 character-level modeling에게 제시된 3가지 문제점이 있다.
 
 1. Can a neural network generate a long, coherent sequence?
-2. Can a neural network capture highly nonlinear orthography?
+2. Can a neural network capture highly nonlinear orthography? (스팰링과 단어와의 상관관계)
 3. Can character-level modeling be done efficiently?
 
 #### Generation a long, coherent sequence
 
 attention과 RNN이 합쳐지면 아무리 긴 sequence여도 coherent가 유지되고 결과를 출력한다.
 
-하지만 complexity of attention은 길이가 긴 sentence가 입력될 수록 매우 커지게 된다. 이를 해결하기 위해 sentence representation을 할 때, CNN(local한 패턴을 잘 잡아내고 압축할 수 있어서 효율적이다)과 RNN을 같이 사용하는 방식을 적용했다.
+하지만 complexity of attention은 길이가 긴 sentence가 입력될 수록 매우 커지게 된다. 이를 해결하기 위해 sentence representation을 할 때, CNN(local한 패턴을 잘 잡아내고(2.) 압축할 수 있어서 효율적이다(3.))과 RNN을 같이 사용하는 방식을 적용했다.
 
 ![CNN_RNN](./images/CNN_RNN.png)
 
@@ -80,7 +82,7 @@ Multilingual task에서 data의 수가 언어마다 다르다면 문제가 생�
 
 목적: 현재 주어진 문제를 잘 푸는 것보다 새로운 문제가 생겼을 때, 적은 수에 데이터로 그 문제를 해결하는 neural network를 만드는 것. 다시 말해 Meta-learning은 fine-tuning이 잘 될 수 있는 parameters의 위치를 찾는 것이다. 
 
-Meta-Learning은 한 문제에 대해 parameter를 업데이트할 gradient를 구하고 바로 parameter를 업데이트하지 않는다. 업데이트가 되었다고 한다면 다른 문제와 다른 언어에 대해 그 parameter가 loss를 가장 낮게 만드는지 관찰한다(다른 문제와 다른 언어에 대해 gradient를 관찰). 
+Meta-Learning은 한 문제에 대해 parameter를 업데이트할 gradient를 구하고 바로 parameter를 업데이트하지 않는다. 업데이트가 되었다고 한다면 다른 문제와 다른 언어에 대해 그 parameter가 loss를 가장 낮게 만드는지 관찰한다(다른 문제와 다른 언어에 대해 gradient를 관찰).  그 후에 가장 loss를 낮추는 gradient로 parameter를 업데이트 한다.
 
 ![meta_learning](./images/meta_learning.png)
 
@@ -88,21 +90,21 @@ Meta-learning으로 인해 우리는 많은 데이터를 가지고 있는 task�
 
 ## Real-Time Translation Learning to Decode
 
-Source만 주어졌을 때, 어떻게 선호하는 translation을 찾을 수 있을까?
-
 ### Decoding from a recurrent language model
+
+Source만 주어졌을 때, 어떻게 선호하는 translation을 찾을 수 있을까?
 
 #### Decoding: Beam Search
 
-가능한 candidate 중 여러가지 선택지를 가지고 진행함
+가능한 candidate 중 여러가지 선택지를 가지고 진행한다.
 
 ![beam_search1](./images/beam_search1.png)
 
-각각의 hypothesis를 확장함
+각각의 hypothesis를 확장한다.
 
 ![beam_search2](./images/beam_search2.png)
 
-하지만 K를 늘린다고 성능이 monotonic하게 늘어나지는 않음
+하지만 K를 늘린다고 성능이 monotonic하게 늘어나지는 않는다.
 
 ### Learning to decode
 
@@ -120,7 +122,9 @@ Hidden layer가 어떠한 정보를 찾아냈는지 살펴보는 것도 중요�
   - Source $S$
 - Reward: arbitrary
 
-RL model을 이용하여 t기의 RNN Cell에 들어가는 t-1기의 출력값을 살짝 조정해준다면 좋은 성능을 낼 수 있게 되었다.
+RL model을 이용하여 t기의 RNN Cell에 들어가는 t-1기의 출력값을 살짝 조정해준다면 좋은 성능을 낼 수 있다.
+
+![RL model](./images/RL_model.png)
 
 ### Simultaneous Translation
 
@@ -130,3 +134,5 @@ RL model을 이용하여 t기의 RNN Cell에 들어가는 t-1기의 출력값을
 - 혹은, t기에 지금까지 나온 token을 이용해 번역을 출력할지
 
 이를 RL model이 학습할 수 있다.
+
+![simulteous_translation](./images/simulteous_translation.png)
