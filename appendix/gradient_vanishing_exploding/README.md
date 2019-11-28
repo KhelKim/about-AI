@@ -1,15 +1,15 @@
 # Gradient Problem
 
+* 참고 사이트
+  * [databuzz](https://databuzz-team.github.io/2018/12/27/Back-Propagation-Part-2/)
+  * [3blue1brown](https://www.youtube.com/watch?v=tIeHLnjs5U8&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi&index=4)
+
 ## Index
 
 1. 역전파
 2. Vanish Gradient Problem
    1. 원인
    2. 해결방안
-
-* 참고 사이트
-  * [databuzz](https://databuzz-team.github.io/2018/12/27/Back-Propagation-Part-2/)
-  * [3blue1brown](https://www.youtube.com/watch?v=tIeHLnjs5U8&list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi&index=4)
 
 Vanishing Gradient, Exploding Gradient 등의 Gradient Problem은 인공신경망에서 기울기(gradient)를 기반으로 하는 방법(backpropagation)으로 학습시킬 때 발생하는 어려움이다.
 
