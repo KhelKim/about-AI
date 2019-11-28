@@ -72,14 +72,61 @@ attention과 RNN이 합쳐지면 아무리 긴 sequence여도 coherent가 유지
 
 Character level로 보게 된다면 알파벳을 쓰는 나라의 언어라면 input에 언어를 굳이 구분하여 encoder를 만들지 않아도 될 것이라고 생각할 수 있다. 이는 decoder는 어떠한 언어가 input으로 들어왔는지를 중요하게 여기는 것이 아니고 어떤 형태의 continuous vector가 들어오는 지가 중요하기 때문이다.
 
-## Meta-Learning of Low-Resource Neural Machine Translation(나중에 돌아오기 ㅠㅠ)
+## Meta-Learning of Low-Resource Neural Machine Translation
 
-Multilingual task에서 data의 수가 언어마다 다르다면 문제가 생긴다. data가 적은 언어에 대해서는 과대적합이 일어나고, data가 많은 언어에 대해서는 충분히 학습되지 못한다. 
+Multilingual task에서 data의 수가 언어마다 다르다면 문제가 생긴다. data가 적은 언어에 대해서는 과대적합이 일어나기 쉽고, data가 많은 언어에 대해서는 충분히 학습되지 못할 수 있다.
 
 ### Meta-learning: MAML
 
 목적: 현재 주어진 문제를 잘 푸는 것보다 새로운 문제가 생겼을 때, 적은 수에 데이터로 그 문제를 해결하는 neural network를 만드는 것. 다시 말해 Meta-learning은 fine-tuning이 잘 될 수 있는 parameters의 위치를 찾는 것이다. 
 
+Meta-Learning은 한 문제에 대해 parameter를 업데이트할 gradient를 구하고 바로 parameter를 업데이트하지 않는다. 업데이트가 되었다고 한다면 다른 문제와 다른 언어에 대해 그 parameter가 loss를 가장 낮게 만드는지 관찰한다(다른 문제와 다른 언어에 대해 gradient를 관찰). 
+
+![meta_learning](./images/meta_learning.png)
+
 Meta-learning으로 인해 우리는 많은 데이터를 가지고 있는 task들을 통해 상대적으로 적은 데이터를 가진 task들을 해결할 수 있게 되었다.
 
-## Real-Time Translation Learning to Decode(나중에 돌아오기 ㅠㅠ)
+## Real-Time Translation Learning to Decode
+
+Source만 주어졌을 때, 어떻게 선호하는 translation을 찾을 수 있을까?
+
+### Decoding from a recurrent language model
+
+#### Decoding: Beam Search
+
+가능한 candidate 중 여러가지 선택지를 가지고 진행함
+
+![beam_search1](./images/beam_search1.png)
+
+각각의 hypothesis를 확장함
+
+![beam_search2](./images/beam_search2.png)
+
+하지만 K를 늘린다고 성능이 monotonic하게 늘어나지는 않음
+
+### Learning to decode
+
+#### Trainable Decoding
+
+Hidden layer가 어떠한 정보를 찾아냈는지 살펴보는 것도 중요한데 NLP task에서는 이미지와는 다르게 잘 파악하기 어렵다. 이를 machine이 해석할 수 있게 하는 것이 trainable decoding이다.
+
+- Environment: conditional recurrent neural net
+- State:
+  - Previous hidden state $h_{t-1}$
+  - Current input $\hat{x}_{t-1}$
+  - Source context  $c_t(s)$
+- Action: any modification
+  - Next input $\hat{x}_t$
+  - Source $S$
+- Reward: arbitrary
+
+RL model을 이용하여 t기의 RNN Cell에 들어가는 t-1기의 출력값을 살짝 조정해준다면 좋은 성능을 낼 수 있게 되었다.
+
+### Simultaneous Translation
+
+동시 번역이 가능하기 위해서는 model이 결정해야하는 것이 있다.
+
+- t기의 token을 받고 기다릴지
+- 혹은, t기에 지금까지 나온 token을 이용해 번역을 출력할지
+
+이를 RL model이 학습할 수 있다.

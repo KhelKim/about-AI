@@ -17,7 +17,7 @@
 
 ## Abstract
 
-
+이 논문에서는 단 하나의 embedding space에 50개가 넘는 언어의 단어들을 embedding하고 평가하는 방법에 대해서 소개하고 있다. 새로운 추정 방식을 **multiCluster**, **multiCCA**라 부르고 이는 언어별 데이터와 사전을 이용한다. 
 
 ## Introduction
 
