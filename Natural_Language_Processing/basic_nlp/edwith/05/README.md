@@ -11,11 +11,11 @@
 
 ### Machine Translation
 
-기계 번역이란 input으로 source language로 쓰여진 문장이 들어오고, output으로 그에 해당하는 target language로 쓰여진 문장이 출력되는 것이다. 
+기계 번역: input으로 source language로 쓰여진 문장이 들어오고, output으로 그에 해당하는 target language로 쓰여진 문장이 출력되는 것
 
 Problem statement는 다음과 같다.
 
-- input 문장에 대해 이에 대한 번역 문장을 출력하는 supervised learning이다.
+- input 문장에 대해 이에 대한 번역 문장을 출력하는 supervised learning이며,
 
 - 주어진 input에 대해 가능한 모든 조건부 확률을 계산한다.
 
@@ -37,7 +37,7 @@ Encoder는 source sentence를 sentence representation vector들로 encoding하�
 
 - Recurrent network가 주로 쓰이며 CNN과 self-attention의 사용횟수도 점점 늘어가는 추세이다.
 
-Encoder는 sentence representation을 하나의 vector로 하지 않는다. 그 이유는 하나의 vector로 encoding하면 information loss가 발생하기 때문이다. sentence의 길이가 매우 길다면 이에 대한 정보를 하나의 vector로 압축하기 힘들 것이고 이에 따라 긴 문장은 모델이 정확하게 번역하기 어려워질 것이다.
+(예전과 달리) Encoder는 sentence representation을 하나의 vector로 하지 않는다. 그 이유는 하나의 vector로 encoding하면 information loss가 발생하기 때문이다. sentence의 길이가 매우 길다면 이에 대한 정보를 하나의 vector로 압축하기 힘들 것이고 이에 따라 긴 문장은 모델이 정확하게 번역하기 어려워질 것이다.
 
 ### Decoder - Language Modelling
 
@@ -92,7 +92,7 @@ Attention mechanism의 효과는 다음과 같다.
 
 이 챕터에서는 다음과 같은 것을 배웠다.
 
-- 기계 번역이란 source language의 하나의 문장을 target lanugaue의 문장에 mapping하는 것이다.
+- machine translation이란 source language의 하나의 문장을 target lanugaue의 문장에 mapping하는 것이다.
 - Neural machine translation이란 하나의 neural entwork가 번역 과정 전부를 계략적으로 파악하는데 사용되는 것이다.
 - RNN neural machine translation system은 다음과 같이 구성된다.
   - Encoder: a bidirectional RNN
