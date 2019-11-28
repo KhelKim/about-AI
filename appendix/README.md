@@ -11,4 +11,6 @@
 2. [Pytorch Tutorial](https://github.com/KhelKim/basic-nlp/tree/master/appendix/pytorch_tutorial)
    1. 파이토치로 딥러닝하기
    2. 예제로 배우는 파이토치
-
+3. [Gradient Problem](https://github.com/KhelKim/about-AI/tree/master/appendix/gradient_vanishing_exploding) 
+   1. 역전파
+   2. Vanish Gradient Problem
