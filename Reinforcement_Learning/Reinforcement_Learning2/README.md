@@ -1,14 +1,13 @@
 # Reinforcement Learning2
 
+출처: http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html
+
 ## Index
 
-1. Model-Based RL Methods - Dynamic Programming
+2. Model-Based RL Methods - Dynamic Programming
    1. Policy Evalution and Improvement steps
    2. Value Iteration
-2. Model-free RL Methods - Monte Carlo Methods &Temporal-Difference Learning
-3. Deep Reinforcement RL
-   1. Policy Gradient
-   2. DQN
+3. Model-free RL Methods - Monte Carlo Methods &Temporal-Difference Learning
 
 ## Model-based RL Methods - Dynamic Programming
 
@@ -39,18 +38,10 @@ Optimal policy를 구하는 방법
 
 Policy iteration과는 다르게 명확한 policy가 정의되지 않기 때문에, 중간에 있는 state value function에 해당하는 policy iteration은 존재하지 않을 수도 있다.
 
+## Model-free RL Methods
 
+Model-based RL methods에서는 환경에 대해 모든 것을 알고 있고 이를 이용하여 policy와 state-value-function을 구했다. 하지만 많은 경우 환경에 대한 정보가 충분하게 주어지지 못한다. 이러한 상태를 model-free라고 하며 MDP transition이나 reward에 대해 전혀 아는 것이 없는 상태이다. 하지만 여러 실험을 통해 $v_\pi(s), q_\pi(s, a)$ 혹은 $\pi(s, a)$를 추정할 수 있다면, optimal state value function과 policy를 추정할 수 있을 것이다. 
 
-## Model-free RL Methods - Monte Carlo Methods &Temporal-Difference Learning
+$v_\pi(s), q_\pi(s, a)$를 추정하여 optimal policy를 추정하는 방법에는 대표적으로 Monte-Carlo Learning와 Temporal-Difference이 있다.
 
-
-
-## Deep Reinforcement RL
-
-
-
-### Policy Gradient
-
-
-
-### DQN
+$\pi(s, a)$를 직접 추정할 수도 있는데 이를 policy gradient라고 하며, NLP에서는 시퀀스 생성 작업에 자주 쓰이는 방법이다. 
