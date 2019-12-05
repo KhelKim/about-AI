@@ -7,7 +7,8 @@
 2. Model-Based RL Methods - Dynamic Programming
    1. Policy Evalution and Improvement steps
    2. Value Iteration
-3. Model-free RL Methods - Monte Carlo Methods &Temporal-Difference Learning
+3. Model-free RL Methods
+4. Policy Gradient
 
 ## Model-based RL Methods - Dynamic Programming
 
@@ -44,4 +45,4 @@ Model-based RL methods에서는 환경에 대해 모든 것을 알고 있고 이
 
 $v_\pi(s), q_\pi(s, a)$를 추정하여 optimal policy를 추정하는 방법에는 대표적으로 Monte-Carlo Learning와 Temporal-Difference이 있다.
 
-$\pi(s, a)$를 직접 추정할 수도 있는데 이를 policy gradient라고 하며, NLP에서는 시퀀스 생성 작업에 자주 쓰이는 방법이다. 
+$\pi(s, a)$를 직접 추정할 수도 있는데 이를 policy gradient라고 하며, NLP에서는 시퀀스 생성 작업에 자주 쓰이는 방법이다.
