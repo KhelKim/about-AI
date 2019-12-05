@@ -11,3 +11,4 @@
   - Transformer
   - Bert
 - Massively Multilingual Word Embeddings
+- Improving Image Captioning with Conditional Generative Adversarial Nets
