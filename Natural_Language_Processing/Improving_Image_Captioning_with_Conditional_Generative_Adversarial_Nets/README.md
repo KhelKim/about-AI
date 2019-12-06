@@ -181,99 +181,113 @@ CNN layer나 RNN layer로 구성된 discriminator는 input으로 들어온 문�
 
 ### CNN-based Discriminator Model
 
+![CNN_RNN_discriminator.png](./images/CNN_RNN_discriminator.png)
 
+CNN-based discriminator의 구조는 위 그림의 왼쪽과 같다.
 
+1. 먼저 CNN layer에 들어가기 위한 feature map을 다음과 같이 만든다.
 
+   $\epsilon = \bar{v} \oplus E\cdot x_1 \oplus E\cdot x_2 \oplus \cdots \oplus E\cdot x_T$
 
+   - where $\bar{v} = CNN(I)$ is the $d$-dimenstional image fueature preprocessed by a CNN for input image $I$,
+   - $E \in \mathbb{R}^{d \times U}$ is the embedding matrix to map a $U$-dimensional one-hot word vector $x_i$ ($i = \{1, 2,\cdots, T\}$) into a $d$-dimensional token embedding,
+   - $\oplus$ is the horizontal concatenation operation to build the matrix $\epsilon  \in \mathbb{R}^{d \times (T+1)}$
 
+2. different window size $d \times l_i (i = \{1, 2, \cdots, m\})$를 이용한 $m$개의 convolution kernel group을 적용한다. 각 group은 $n_i$ ($i = \{1, 2, \cdots, m\}$)개의 kernel들로 이루어져있다.
 
+   concatenated feature map $\epsilon$에 적용되는 한 kernel($\in \mathbb{R}^{d \times l}$)은 feature map $c$($= [c_1, c_2, \cdots, c_{T-l+2}]$)을 생성한다.
 
+   $c_i = ReLU(w * \epsilon_{i:i+l-1} + b)$ 
 
+   - where $i = \{1, 2, \cdots, T-l+2\}$,
+   - $*$ is the convolution operation,
+   - $b$ is  a bias term
+   - $ReLU(\cdot)$ is the Rectified Linear Unit.
 
+3. Max-over-time pooling operation을 적용하고 모든 pooled feature들을 concatenate한다.
 
+   $\tilde{c} \operatorname{concatenation}_{k \in kernels}(max\{c^k\}) $
 
+   - where $\tilde{c} \in \mathbb{R}^n$ ($n = \sum^m_{i=1} n_i$)
 
+4. High way architecture을 적용한다.
 
+   $\tau = \sigma(W_T \cdot \tilde{c} + b_ T)$
 
+   $H = ReLU(W_H \cdots \tilde{c} + b_H)$
 
+   $\tilde{C} = \tau \odot H + (1 - \tau) \odot \tilde{c}$,
 
+   - where $W_T, W_H \in \mathbb{R}^{n \times n}$ and $b_T, b_H \in \mathbb{R} ^ n$ are high way layer weights and bias, respectively,
+   - $\sigma$ is the sigmoid function,
+   - $\odot$ is the piece-wise multiplication operation.
+   
+5. 마지막으로 fully connected layer와 sigmoid transformation을 \tilde{C}에 적용하여 given sentence가 human generated sentence일 확률을 출력한다.
 
+   $p = \sigma(W_o \cdot \tilde{C} + b_o)$,
 
+   - where $W_0 \in \mathbb{R} ^ {2 \times n}$ and $b_o \in \mathbb{R}^2$ are output layer weights and bias, respectively.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   Q. 왜 $\mathbb{R}^{2\times n}$일까?
 
 ### RNN-based Discriminator Model
 
+![CNN_RNN_discriminator.png](./images/CNN_RNN_discriminator.png)
 
+RNN-based discriminator의 구조는 위 그림의 오른쪽과 같다.
 
+1. Image feature vector $\bar{v}$와 randomly initialized hidden state $h_0 \in \mathbb{R}^d$를 LSTM에 넣는다.
 
+2. 그 다음 스탭부터는 token embeddings를 LSTM에 넣는다.
 
+   $h_{t+1}=
+\begin{cases}
+LSTM, & t=0 \\
+3n+1, & t = 1, 2, \cdots, T
+\end{cases}$
 
+3. 마지막으로 fully connected layer와 softmax layer를 지나 출력된 sentence가 human generated sentence일 확률을 출력한다.
 
+   $p = \sigma(W_R \cdot h_{T+1} + b_R)$,
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   - where $W_0 \in \mathbb{R} ^ {2 \times n}$ and $b_o \in \mathbb{R}^2$ are output layer weights and bias, respectively.
 
 ### Algorithm
 
+Discriminator의 parameters $\phi$는 다음의 함수를 최대화하게 학습된다.
 
+$\begin{matrix}
+L_D(\phi) &=&  \mathbb{E}_{I, x_{1:T} \in \mathbb{S}_r}[\operatorname{log}D_\phi(I, x_{1:T})] \\
+     &+& 0.5 \cdot \mathbb{E}_{I, \tilde{x}_{1:T} \in \mathbb{S}_f}[\operatorname{log}(1- D_\phi(I, x_{1:T}))]\\
+     &+& 0.5 \cdot \mathbb{E}_{I, \hat{x}_{1:T} \in \mathbb{S}_w}[\operatorname{log}(1 -D_\phi(I, x_{1:T}))]\\
+\end{matrix}$ 
 
+- where $\mathbb{S}_r$: real pairs $(I, x_{1:T})$
+- $\mathbb{S}_f$: fake pairs $(I, \tilde{x}_{1:T})$
+- $\mathbb{S}_w$: wrong pairs $(I, \hat{x}_{1:T})$
 
+```
+Algorithm 1. Image Captioning Via Generative Adversarial Training Method
 
+Require: caption generator G_theta; discriminator D_phi; language evaluator Q, e.g. CIDEr-D; training set S_r = {(I, x_1:T)} and S_w = {(I, hat_x_1:T)}
 
-
-
-
-
-
-
-
-
+Ensure: optimal parameters theta, phi
+	1: Initial G_theta and D_phi randomly.
+	2: Pre-train G_theta on S_r by MLE.
+	3: Generate some fake samples based on G_theta to form S_f = {(I, tilde_x_1:T)}.
+	4: Pre-train D_phi on the union of S_R, S_f and S_w.
+	5: repeat
+	6: 	for g-steps=1 : g do
+	7: 		Generate a mini-batch of image-sentence pairs {(I, tilde_x_1:T)} by G_theta.
+	8: 		Calculate p.
+	9: 		Calculate s based on Q.
+	10: 	Calculate reward r.
+	11: 	Update generator parameters theta by SCST method.
+	12:  end for
+	13:  for d-steps=1 : d do
+	14: 	Generate negative image-sentence pairs {(I, tilde_x_1:T)} by G_theta, together with negative samples {(I, hat_x_1:T)} in S_w and positive samples {(I, x_1:T)} in S_r.
+	15: 	Update discriminator parameters phi.
+	16:  end for
+	17: until generator and discriminator converge.
+```
 
