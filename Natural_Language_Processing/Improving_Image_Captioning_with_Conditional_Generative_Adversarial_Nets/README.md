@@ -10,11 +10,12 @@
    1. Overall Framework
    2. CNN-based Discriminator Model
    3. RNN-based Discriminator Model
-   4. Algorithm
+   4. Discriminator's Obejective Function
+   5. Algorithm
 
 ## Preliminary
 
-본 논문은 Image Captioning에 decoder 파트에서 강화학습을 사용한다. 이를 이해하기 위해서 NLP에서 sentence generation을 할 때에 강화학습을 적용하는  방식을 알아보자.
+본 논문은 Image Captioning에 decoder 파트에서 강화학습을 사용한다. 이를 이해하기 위해서 NLP에서 sentence generation을 할 때에 강화학습이 어떻게 적용되는지 알아보자.
 
 강화학습은 환경 environment, 상태 state, 보상 reward, 전략 policy로 구성되어있고, 최종적인 reward를 최대화하기 위해 적절한 policy를 구하는 것이 목적이다. sentence generation을 하기 위해 RNN을 주로 사용하는데 RNN은 강화학습을 적용하기 좋은 특성을 가지고 있다.
 
@@ -32,7 +33,7 @@
   - $x^s$: sentence from the distribution $G_\theta $
   - $r$: language evaluation metric score(CIDEr, BLUE, SPICE, etc.)
 
-이 목적함수는 값이 커져야하며 목적함수의 값을 가장 크게 하는 최적 parameters를 찾기위해 policy gradient인 REINFORCE 알고리즘을 이용할 것이다. Gradient estimate의 variance를 줄이기 위해 baseline function $b$를 사용한다.
+목적함수의 값을 가장 크게 하는 최적 parameters를 찾기위해 policy gradient인 REINFORCE 알고리즘을 이용할 것이다. Gradient estimate의 variance를 줄이기 위해 baseline function $b$를 사용한다.
 
 - $\bigtriangledown_\theta L_G(\theta) \approx 
 \sum^{T_s}_{t=1}(r(x^s_{1:t}) - b) \bigtriangledown_\theta \operatorname{log} G_\theta(x^s_t|x^s_{1:t-1})
@@ -50,11 +51,11 @@ $
 
 1. sentence generation 과정
 
-   $t=1$일 때, 주어진 state $S_1$는 (\<sos\>)이고, 그에 따른 reward는 $r_1$이다. $S_1$의 $G_\theta$ 값인 discrete probability distribution에서 $x_1$을 추출한다.
+   $t=1$일 때, 주어진 state $S_1$는 (\<sos\>)이다. $S_1$의 $G_\theta$ 값인 discrete probability distribution에서 $x_1$을 추출한다.
    
-   $t=2$일 때, 주어진 state $S_2$는 (\<sos>, $x_1$)이고, 그에 따른 reward는 $r_2$이다. $S_2$의 $G_\theta$ 값인 discrete probability distribution에서 $x_2$를 추출한다.
+   $t=2$일 때, 주어진 state $S_2$는 (\<sos>, $x_1$)이다. $S_2$의 $G_\theta$ 값인 discrete probability distribution에서 $x_2$를 추출한다.
    
-   만약 $x_2$가 \<eos\> token이라면 주어진 state $S_3$, (\<sos\>, $x_1$, $x_2$)를 평가한 reward $r_3$를 얻고 프로세스가 종료된다.
+   만약 $x_2$가 \<eos\> token이라면 주어진 state $S_3$(\<sos\>, $x_1$, $x_2$)를 평가한 reward $r$을 얻고 프로세스가 종료된다.
    
    | T    | S    |     |                                                              |
    | ---- | ---- | ---- | ------------------------------------------------------------ |
@@ -70,7 +71,7 @@ $
 
    - $\alpha\{r^t G_t\bigtriangledown_\theta \operatorname{log}\pi_\theta(A_t|S_t)\}$
 
-   본 논문에서는 discount factor가 1이며, return $G_t$를 $r(x^s) - r(x^g)$로 사용한다.
+   본 논문에서는 discount factor $\alpha$가 1이며, return $G_t$를 $r(x^s) - r(x^g)$로 사용한다.
 
    - $t = 1$
 
@@ -96,11 +97,11 @@ $
 
 이 논문은 reinforcement-learning의 확장으로서 encoder-decoder 구조를 가진 GAN image captioning framework를 제안한다.
 
-기존 연구들은 다양한 automatic metrics에서 높은 점수를 받기위해 하나의 metric이나 이들의 조합으로 model들을 최적화해왔다. 그러나 이런 부분 최적화 방식은 다양한 metric에 대하여 일관된 성능을 보장하지 못했다. 이로 인해 저자들은 모든 language evaluation metrics 부분에서 동시에 좋은 성과를 향상시키기 위해 "discriminator" network를 고안했다. 
+기존 연구들은 다양한 automatic metrics에서 높은 점수를 받기위해 하나의 metric이나 이들 몇 개의 조합으로 model들을 최적화해왔다. 하지만 이러한 부분 최적화 방식은 다양한 metric에 대하여 일관된 성능을 보여주지 못한다. 저자들은 모든 language evaluation metrics에 좋은 성과를 향상시키기 위해 "discriminator" network를 고안하게 되었다. 
 
 ### Main contributions
 
-- 기존에 있던 RL-based image captioning framework를 강화할 수 있고, 전반적인 evaluation metrics에 대해 높은 성과를 보이는 generic한 알고리즘
+- 기존에 있던 RL-based image captioning framework를 확장할 수 있고, 전반적인 evaluation metrics에 대해 높은 성과를 보이는 generic한 알고리즘
 - 기존 evaluation metrics을 대체할 수 있는 neural nework를 사용한 Well-trained discriminators
 
 ## Image Captioning Via Reinforcement Learning
@@ -137,7 +138,7 @@ $
 
 - $L_G(\theta) \thickapprox r(x^s), x^s \sim G_\theta$
 
-$L_G(\theta)$의 gradient는 baseline function $b$을 가지고 있는 REINFORCE 알고리즘 같은 policy gradient approach로 계산될 수 있다.
+$L_G(\theta)$의 gradient는 baseline function $b$을 가지고 있는 REINFORCE policy gradient approach로 계산될 수 있다.
 
 - $\bigtriangledown_\theta L_G(\theta) \thickapprox 
   \sum^{T_s}_{t=1}(r(x^s_{1: t }) - b) \bigtriangledown_\theta \operatorname{log} G_\theta(x^s_t|x^s_{1:t-1})
@@ -149,8 +150,8 @@ Self-critical sequence training(SCST) method는 baseline function $b$으로 rewa
   \sum^{T_s}_{t=1}(r(x^s) - r(x^g)) \bigtriangledown_\theta \operatorname{log} G_\theta(x^s_t|x^s_{1:t-1})
   $  
   - 여기서 $x^s_{1:T_s}$, $x^g_{1:T}$의 reward는 t에 따라 변하지 않음으로, 편의상 $x^s$와 $x^g$로 표기한다.
-  - $r(x^s_{1:t})$와 $r(x^g_{1:t})$를 비교하는 것은 비합리적일 수 있다.
-    - 매번 t에 따라 이 두 값을 비교한다면 parameters는 완벽하게 $x^g_{1:t}$를 출력하려 할 것이다. 하지만 GAN의 목적은 true value들의 distribution을 찾는 것이 목적이기 때문에 하나하나 비교하는 것은 좋지 않은 선택일 수 있다.  
+  - $r(x^s_{1:t})$와 $r(x^g_{1:t})$를 비교하는 것은 비합리적이다.
+    - 두 seqence 모두 완전하지 않은 문장이기 때문에, reward가 낮다.
 
 
 ## Proposed Conditional Generative Adversarial Training Method
@@ -163,13 +164,13 @@ Self-critical sequence training(SCST) method는 baseline function $b$으로 rewa
 
 #### Generator
 
-미리 훈련된 CNN layer를 통해 (weights can be fixed) 이미지의 feature들을 추출하고 이를 attention layer(unnecessary)를 지나 RNN layer에 입력하여 sequence $\tilde{X}_{1:T}$를 출력한다.
+미리 훈련된 CNN layer를 통해 (weights can be fixed) 이미지의 feature들을 추출하고 attention layer(unnecessary)를 통해 각 feature의 상관관계를 파악하고, RNN layer를 이용해 sequence $\tilde{x}_{1:T}$를 출력한다.
 
 #### Discriminator
 
 CNN layer나 RNN layer로 구성된 discriminator는 input으로 들어온 문장이 human generated sentence일 확률을 출력한다.
 
-마지막으로 BLUE, CIDEr 등의 language metrics를 통해 machine generated sentence를 평가하여 reward function $r$을 구한다.
+마지막으로 BLUE, CIDEr 등의 language metrics를 통해 sentence를 평가하여 reward function $r$을 구한다.
 
 - $r(\tilde{x}|I, x) = \lambda \cdot p + (1 - \lambda)\cdot s = \lambda\cdot D_\phi(\tilde{x}|I) + (1 - \lambda)\cdot Q(\tilde{x}|x)$
   - where $\tilde{x}$: full sentence given image $I$
@@ -187,13 +188,13 @@ CNN-based discriminator의 구조는 위 그림의 왼쪽과 같다.
 
 1. 먼저 CNN layer에 들어가기 위한 feature map을 다음과 같이 만든다.
 
-   $\epsilon = \bar{v} \oplus E\cdot x_1 \oplus E\cdot x_2 \oplus \cdots \oplus E\cdot x_T$
+   $\epsilon = \bar{v} \oplus (E\cdot x_1) \oplus (E\cdot x_2) \oplus \cdots \oplus (E\cdot x_T)$
 
    - where $\bar{v} = CNN(I)$ is the $d$-dimenstional image fueature preprocessed by a CNN for input image $I$,
    - $E \in \mathbb{R}^{d \times U}$ is the embedding matrix to map a $U$-dimensional one-hot word vector $x_i$ ($i = \{1, 2,\cdots, T\}$) into a $d$-dimensional token embedding,
    - $\oplus$ is the horizontal concatenation operation to build the matrix $\epsilon  \in \mathbb{R}^{d \times (T+1)}$
 
-2. different window size $d \times l_i (i = \{1, 2, \cdots, m\})$를 이용한 $m$개의 convolution kernel group을 적용한다. 각 group은 $n_i$ ($i = \{1, 2, \cdots, m\}$)개의 kernel들로 이루어져있다.
+2. different window size $d \times l_i (i = \{1, 2, \cdots, m\})$를 이용해 $m$개의 convolution kernel group을 생성한다. 각 group은 $n_i$ ($i = \{1, 2, \cdots, m\}$)개의 feature maps로 이루어져있다.
 
    concatenated feature map $\epsilon$에 적용되는 한 kernel($\in \mathbb{R}^{d \times l}$)은 feature map $c$($= [c_1, c_2, \cdots, c_{T-l+2}]$)을 생성한다.
 
@@ -206,7 +207,7 @@ CNN-based discriminator의 구조는 위 그림의 왼쪽과 같다.
 
 3. Max-over-time pooling operation을 적용하고 모든 pooled feature들을 concatenate한다.
 
-   $\tilde{c} \operatorname{concatenation}_{k \in kernels}(max\{c^k\}) $
+   $\tilde{c} = \operatorname{concatenation}_{k \in kernels}(max\{c^k\}) $
 
    - where $\tilde{c} \in \mathbb{R}^n$ ($n = \sum^m_{i=1} n_i$)
 
@@ -222,7 +223,7 @@ CNN-based discriminator의 구조는 위 그림의 왼쪽과 같다.
    - $\sigma$ is the sigmoid function,
    - $\odot$ is the piece-wise multiplication operation.
    
-5. 마지막으로 fully connected layer와 sigmoid transformation을 \tilde{C}에 적용하여 given sentence가 human generated sentence일 확률을 출력한다.
+5. 마지막으로 fully connected layer와 sigmoid transformation을 $\tilde{C}$에 적용하여 given sentence가 human generated sentence일 확률을 출력한다.
 
    $p = \sigma(W_o \cdot \tilde{C} + b_o)$,
 
@@ -252,7 +253,7 @@ LSTM, & t=0 \\
 
    - where $W_0 \in \mathbb{R} ^ {2 \times n}$ and $b_o \in \mathbb{R}^2$ are output layer weights and bias, respectively.
 
-### Algorithm
+### Discriminator's Obejective Function
 
 Discriminator의 parameters $\phi$는 다음의 함수를 최대화하게 학습된다.
 
@@ -265,6 +266,8 @@ L_D(\phi) &=&  \mathbb{E}_{I, x_{1:T} \in \mathbb{S}_r}[\operatorname{log}D_\phi
 - where $\mathbb{S}_r$: real pairs $(I, x_{1:T})$
 - $\mathbb{S}_f$: fake pairs $(I, \tilde{x}_{1:T})$
 - $\mathbb{S}_w$: wrong pairs $(I, \hat{x}_{1:T})$
+
+### Algorithm
 
 ```
 Algorithm 1. Image Captioning Via Generative Adversarial Training Method
