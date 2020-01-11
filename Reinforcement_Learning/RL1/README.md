@@ -4,14 +4,9 @@
 
 ## Index
 
-1. Introduction - Reinforcement Learning
+[TOC]
 
-   1. MDP(Markov Decision Processes), Policy & Value Function & Model
-2. Model-Based RL Methods - Dynamic Programming
-   1. Policy Evalution and Improvement steps
-   2. Value Iteration
-3. Model-free RL Methods
-4. Policy Gradient
+---
 
 ## Introduction - Reinforcement Learning
 
@@ -27,13 +22,19 @@
 
 보상(reward)
 
-행동 순서를 선택(policy)
+행동 혹은 행동 순서를 선택(policy)
 
 강화 학습에서 다루는 '환경'은 주로 마르코브 결정 과정(MDP, Markov Decision Processes)으로 주어진다.
+
+여기서 나오는 **환경, 에이전트, 행동, 보상, 마르코브 결정 과정**의 정의는 밑에 예시로 알아가보자.
+
+---
 
 ### MDP(Markov Decision Processes)
 
 #### Markov Chains
+
+key words
 
 **환경**, **에이전트**, **상태**, **행동**, **에피소드**
 
@@ -68,7 +69,11 @@
 
 ![episodes](./images/episodes.png)
 
+---
+
 #### Markov Reward Process
+
+key words
 
 **reward**, **discount factor**, **return**, **state value function**
 
@@ -120,6 +125,8 @@ Bellman equation은 하나의 선형방정식이기 때문에 바로 솔루션�
 
 ![solving_bellman_equation.png](./images/solving_bellman_equation.png)
 
+---
+
 #### Markov Decision Process
 
 **policy**, **action-value function**
@@ -132,7 +139,9 @@ Markov Decision Process란 decision이 있는 Markov reward process다.
 
 ![definition_MDP.png](./images/definition_MDP.png)
 
-MDP에서는 한 state에서 다른 state로 넘어갈 때, action이라는 요소가 추가된다. 이에 따라 reward function에도 변화가 생겼다. 본 예제에서는 행동을 선택한다면 다음 state가 1의 확률로 정해지지만 MDP에서는 꼭 그래야한다는 보장은 없다. 예시 그림은 다음과 같다.
+MDP에서는 한 state에서 다른 state로 넘어갈 때, action이라는 요소가 추가된다. 이에 따라 reward function에도 변화가 생겼다. 본 예제에서는 Pub이 아닌 행동을 선택한다면 다음 state가 1의 확률로 정해지고 Pub을 선택하면, 0.2, 0.4, 0.4의 확률로 C1, C2, C3의 state가 된다.
+
+- 일반적인 MDP 그림
 
 ![MDP2.png](./images/MDP2.png)
 
@@ -141,6 +150,9 @@ MDP에서는 한 state에서 다른 state로 넘어갈 때, action이라는 요�
 ![policy.png](./images/policy.png)
 
 이러한 policy에 따라 추가적인 notation인 $P^{\pi}_{s, s'}, R^{\pi}_{s}$의 정의가 필요하다.
+
+- $P^{\pi}_{s, s'}$: state s에서 policy $\pi$를 취할 때, state s'에 도달할 확률
+- $R^{\pi}_{s}$: state s에서 policy $\pi$를 취할 때, 얻을 수 있는 reward
 
 ![MDP_probability_reward.png](./images/MDP_probability_reward.png)
 
@@ -156,7 +168,7 @@ MDP에서는 한 state에서 다른 state로 넘어갈 때, action이라는 요�
 
 ![optimal_functions.png](./images/optimal_functions.png)
 
-policy $\pi$에 의해 결정되는 $v_\pi(s)$과 $q_{pi}(s, a)$도 Bellman equation으로 표현할 수 있다.
+policy $\pi$에 의해 결정되는 $v_\pi(s)$과 $q_{\pi}(s, a)$도 Bellman equation으로 표현할 수 있다.
 
 Theorem2. Bellman Expectation Equation
 
