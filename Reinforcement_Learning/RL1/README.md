@@ -191,6 +191,8 @@ Theorem3.
 
 For any Markov Decision Process, there exists an optimal policy $\pi_*$ that is better than or equal to all other policies, i.e.. $v_{\pi_*}(s) \geq v_\pi(s), q_{\pi_*}(s, a) \geq q_\pi(s, a), \forall \pi$ and $v_{\pi_*}(s) = v_*(s), q_{\pi_*}(s, a) = q_*(s, a)$
 
+---
+
 #### Finding an Optimal Policy
 
 Optimal Policy는 $q_*(s, a)$를 최대화하면서 얻을 수 있다.
@@ -199,15 +201,15 @@ Optimal Policy는 $q_*(s, a)$를 최대화하면서 얻을 수 있다.
 
 어떠한 MDP에서도 deterministic한 optimal policy를 찾을 수 있다.
 
-Optimal Value Function for Student MDP
+**Optimal Value Function for Student MDP**
 
 ![optimal_value_function.png](./images/optimal_value_function.png)
 
-Optimal Action-Value Function for Student MDP
+**Optimal Action-Value Function for Student MDP**
 
 ![optimal_action_value_function.png](./images/optimal_action_value_function.png)
 
-Optimal Policy for Student MDP
+**Optimal Policy for Student MDP**
 
 ![optimal_policy_for_student.png](./images/optimal_policy_for_student.png)
 
@@ -216,18 +218,20 @@ Optimal Policy for Student MDP
 - $v_*(s) = max_a(R^a_s + \gamma \sum_{s'\in S}P^a_{ss'}v_\pi(s'))$
 - $q_*(s, a) = R^a_s + \gamma \sum_{s'\in S}P^a_{ss'}max_{a'}( q_\pi(s', a'))$
 
-하지만 위 방정식은 non-linear이고 MRP처럼 역행렬을 이용해 구할 수 없다. 따라서 다른 solution method이 알려져 있다.
+하지만 위 방정식은 non-linear이고 MRP처럼 역행렬을 이용해 구할 수 없다. 이를 해결하기 위해 다른 solution method이 존재한다.
 
 - Value Iteration
 - Policy Iteration
 - Q-learning
 - Sarsa
 
-## Model-based RL Methods - Dynamic Programming
+---
 
-Optimal policy를 구하는 방법
+## Model-based RL - Dynamic Programming
 
 ### Policy Evalution and Improvement steps
+
+policy가 고정되어 있다면, 그 policy에 대한 state value function을 구할 수 있고, state value function이 고정되어 있다면, 그 state value function에 대한 optimal policy를 구할 수 있다.
 
 1. 먼저 임의로 초기화된 policy $\pi_0$가 있고, state value function $v_0$를 모든 state s에 대해 0의 값을 갖게 초기화하자.
 2. 그렇다면 $\pi_0$에 대해서 state value function을 업데이트할 수 있다.
@@ -248,13 +252,17 @@ Optimal policy를 구하는 방법
 
    - $v_{new}(s) \leftarrow \operatorname{max}_{a\in A}(R^a_s + \gamma \sum_{s' \in S} P^a_{ss'}v_{old}(s'))$
 
-     를 반복한다.
+   를 반복한다.
+   
+3. 수렴한 state value function을 이용하여, optimal policy를 구한다.
 
 Policy iteration과는 다르게 명확한 policy가 정의되지 않기 때문에, 중간에 있는 state value function에 해당하는 policy iteration은 존재하지 않을 수도 있다.
 
-## Model-free RL Methods
+---
 
-Model-based RL methods에서는 환경에 대해 모든 것을 알고 있고 이를 이용하여 policy와 state-value-function을 구했다. 하지만 많은 경우 환경에 대한 정보가 충분하게 주어지지 못한다. 이러한 상태를 model-free라고 하며 MDP transition이나 reward에 대해 전혀 아는 것이 없는 상태이다. 하지만 여러 실험을 통해 $v_\pi(s), q_\pi(s, a)$ 혹은 $\pi(s, a)$를 추정할 수 있다면, optimal state value function과 policy를 추정할 수 있을 것이다. 
+## Model-free RL
+
+Model-based RL에서는 환경에 대해 모든 것을 알고 있다고 가정하고, 이를 이용하여 policy와 state-value-function을 구했다. 하지만 많은 경우 환경에 대한 정보가 충분하게 주어지지 못한다. 이러한 상태를 model-free라고 하며 MDP transition이나 reward에 대해 전혀 아는 것이 없는 상태이다. 하지만 여러 실험을 통해 $v_\pi(s), q_\pi(s, a)$ 혹은 $\pi(s, a)$를 추정할 수 있다면, optimal state value function과 policy를 추정할 수 있을 것이다. 
 
 $v_\pi(s), q_\pi(s, a)$를 추정하여 optimal policy를 추정하는 방법에는 대표적으로 Monte-Carlo Learning와 Temporal-Difference이 있다.
 
