@@ -14,7 +14,7 @@
 3. [Gradient Problem](https://github.com/KhelKim/about-AI/tree/master/appendix/gradient_vanishing_exploding) 
    1. 역전파
    2. Vanish Gradient Problem
-4. Loss Function
+4. [Loss Function](https://github.com/KhelKim/about-AI/tree/master/appendix/loss_function)
    1. Definition of Loss Function
    2. In Regression
    3. In Classification
